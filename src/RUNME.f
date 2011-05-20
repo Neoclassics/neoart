@@ -1,0 +1,106 @@
+      PROGRAM TEST1
+C-----------------------------------------------------------------
+C     CALCULATE THE TRANSPORT COEFFICIENTS IN THE BANANA REGIME 
+C     FOR A SIMPLE HYDROGEN PLASMA AND COMPARE THEM WITH THE 
+C     VALUES GIVEN IN THE LITERATURE.
+C-----------------------------------------------------------------
+      IMPLICIT NONE
+
+      INTEGER NS,NC,NAR,ISEL,NREG,NLEG,NENERGY,NCOF,
+     +        IC,NZM,I,J,NMAXGR,ISHOT,K
+      REAL*8 M,T,DEN,DS,CFF1,CFF2,CFF3,CFF4,XI,TAU,COEFF,
+     +       EPS, SIGMA, NORM, ZSP, EPARR
+      REAL*8 RHO, RN, E, Q, BN
+      LOGICAL NEOGEO, NEOFRC
+
+      include 'elem_config.inc'
+      
+      parameter(NAR = NELMAX+2)
+      parameter(NZM = NIONMAX)
+      PARAMETER(NMAXGR = 1000)
+
+      DIMENSION NC(NAR),ZSP(NAR,NZM),M(NAR),T(NAR),DEN(NAR,NZM),
+     +          DS(NAR,NZM,2),CFF1(NAR,NZM,4),CFF2(NAR,NZM,4),
+     +          CFF3(NAR,NZM,4),CFF4(NAR,NZM,4),XI(NAR,NZM),
+     +          TAU(NAR,NAR),SIGMA(4)
+
+
+C     SET THE PARAMETERS FOR THE CIRCULAR GEOMETRY
+      RHO = 0.05
+      E = 0.04
+      Q = 2.
+      RN = 1.
+      BN = 1.
+      EPARR = 0.0 
+C     COPY THEM INTO THE VALUES USED BY THE CODE
+      CALL CIRCGEOM(1,RHO,RN,E,Q,BN)
+C     USE THE CIRCULAR GEOMETRY APPROXIMATION
+      ISEL = 2
+C     SET THE ACCURACY
+      EPS = 1E-5
+c     FORCE THE BANANA REGIME IN THE CALCULATION OF THE TRANSPORT
+C     FLUXES (IN THE CALCULATION OF THE VISCOSITY)
+      NREG = 0
+c     THE NUMBER OF LEGENDRE HARMONICS
+      NLEG = 3
+C     USE ENERGY SCATTERING IN THE CALC. OF VISCOSITY
+      NENERGY = 0
+C     SWITCH OFF ION-ELECTRON COLLISIONS
+      NCOF = 0
+C     IN THE FIRST CALL THE MATRICES HAVE TO BE CALCULATED
+      NEOFRC = .FALSE.
+C     CALCULATE THE BANANA PLATEAU CONTRIBUTION
+      IC = 3
+
+C     THE NUMBER OF SPECIES IS 2
+      NS = 2
+C     IONS AND ELECTRONS HAVE ONLY ONE CHARGE 
+      NC(1) = 1
+      NC(2) = 1
+C     THE MASS OF THE ELECTRON AND PROTON
+      M(1) = 9.1096E-31
+      M(2) = 1.6727E-27
+C     THE CHARGE OF THE ELECTRON AND ION
+      ZSP(1,1) = -1
+      ZSP(2,1) = 1
+C     THE DENSITY OF THE SPECIES IN 10^19 M^-3
+      DEN(1,1) = 0.5 
+      DEN(2,1) = 0.5 
+C     THE TEMPERATURE IN KEV
+      T(1) = 1.
+      T(2) = 1.
+
+      DO 111 K = 1, 13
+ 
+        E = 0.04 + 0.24*(K-1.)/12. 
+
+C       COPY GEOM VALUES INTO THE VALUES USED BY THE CODE
+        CALL CIRCGEOM(1,RHO,RN,E,Q,BN)
+
+c       THE THERMODYNAMIC FORCE
+        DO 204 I = 1, NS
+          DO 204 J = 1, NC(I)
+            DS(I,J,1) = 0.
+            DS(I,J,2) = 0.
+ 204    CONTINUE
+        DS(2,1,2) = 1.
+
+        NEOFRC = .false. 
+        NEOGEO = .TRUE.
+
+        CALL NEOART(NS,NC,NAR,NZM,ZSP,M,T,DEN,DS,RHO,EPS,
+     +              ISEL,ISHOT,NREG,SIGMA,NLEG,NENERGY,NCOF,
+     +              NEOGEO,NEOFRC,IC,EPARR,CFF4)
+
+
+        CALL COLXI(NAR,NZM,NS,NC,ZSP,DEN,T,M,TAU,XI)
+ 
+        NORM = 1.6E-22*BN**2*SQRT(E**3)/(2*(Q)**2
+     +         *T(2)*TAU(2,2))
+
+        WRITE(*,*) E, SQRT(2.)*CFF4(2,1,2)*NORM
+
+ 111  CONTINUE 
+
+      STOP
+      END      

@@ -1,0 +1,95 @@
+      SUBROUTINE JBOOT(NAR,NZM,NS,NC,ZSP,ISEL, FILE,
+     +                 M,T,DEN,DS,RHO,EPS,BS)
+C--------------------------------------------------------------------
+C     SUBROUTINE THAT CALCULATES THE BOOTSTRAP CURRENT
+C
+C     INPUT    : NAR   THE MAXIMUM NUMBER OF SPECIES (USED FOR 
+C                      CONSISTENCY CHECK.
+C                NZM   THE MAXIMUM NUMBER OF CHARGE STATES (USED
+C                      FOR CONSISTENCY CHECK)
+C                NS    THE ACTUAL NUMBER OF SPECIES
+C                NC    ARRAY(NS) THE NUMBER OF CHARGES STATES PER
+C                      SPECIES
+C                ZSP   ARRAY(NAR,NZM) REAL.  THE CHARGE OF EVERY
+C                      COMPONENTS (NORMALIZED TO E)
+C                ISEL  INTEGER THAT SELECTS THE REPRESENTATION OF 
+C                      THE GEOMETRY 1 = HAMADA COORDINATES 2 = 
+C                      CIRCULAR APPROXIMATION, 3 = READ FROM FILE
+C                FILE  GEOEMETRY FILE, ONLY USED WHEN ISEL = 3
+C                M     ARRAY(NS) THE MASS OF THE SPECIES IN KG
+C                T     ARRAY(NS) THE TEMPERATURE OF THE SPECIES IN
+C                      KEV
+C                DEN   ARRAY(NAR,NZM) THE DENSITY OF EVERY COMPONENT
+C                      IN UNITS OF 1.10^-19 M^-3
+C                DS    ARRAY(NAR,NZM,2) THE THERMODYNAMIC FORCES 
+C                      SEE THE COMMENTS OF THE ROUTINE NEOART TO 
+C                      FIND THE EXACT DEFINITION
+C                RHO   THE FLUX SURFACE LABEL
+C                EPS   THE DESIRED ACCURACY
+C     OUTPUT     BS    THE BOOTSTRAP CURRENT DENSITY 
+C                      IN UNITS OF A/RHO^2     
+C
+C     THE ROUTINE CALLS THE FOLLOWING SUBROUTINES
+C     PERR    : FOR ERROR HANDLING
+C     NEOART  : TO CALCULATE THE FLUXES
+C--------------------------------------------------------------------
+      IMPLICIT NONE
+
+      include 'elem_config.inc'
+      
+      integer NSM, NCM 	
+      parameter(NSM = NELMAX+2)
+      parameter(NCM = NIONMAX)
+
+      INTEGER NS, NC, ISEL, NREG, NLEG, NENERGY, NCOF, IC,
+     +        I, J, NAR, NZM
+      REAL*8 M, T, DEN, DS, RHO, EPS, SIGMA, COEFF,
+     +       ZSP,  BS, EPARN
+      
+      CHARACTER*(*) FILE
+      LOGICAL NEOFRC, NEOGEO
+
+      DIMENSION M(NSM), T(NSM), DEN(NSM,NCM), DS(NSM,NCM,2), 
+     +          SIGMA(4), COEFF(NSM,NCM,4),
+     +          NC(NSM), ZSP(NSM,NCM) 
+         
+C     CHECK CONSITENCY OF SETTINGS
+      IF ((NAR.NE.NSM).OR.(NZM.NE.NCM)) CALL PERR(1)
+
+C     ONLY BP-PART IS NEEDED FOR BOOTSTRAP CURRENT
+      IC = 1
+C     ALWAYS USE ALL THE FULL EXPRESSION OF THE VISCOSITY
+      NREG = 0
+C     USE 3 LEGENDRE POLYNOMALS
+      NLEG = 3
+C     USE ENERGY SCATTERING IN THE COLLISION OPERATOR
+      NENERGY = 1
+C     USE ION - ELECTRON COLLISIONS
+      NCOF = 1
+C     USE ALL COUPLINGS IN THE PFIRSCH SCHLUETER REGIME
+      SIGMA(1) = 1
+      SIGMA(2) = 1
+      SIGMA(3) = 1
+      SIGMA(4) = 1
+C     RECACLULATE THE FRICTION/VISCOSITY AND GEOMETRY PARAMETERS
+      NEOFRC = .FALSE.
+      NEOGEO = .TRUE. 
+C     ULOOP SET TO ZERO
+      EPARN = 0.
+      
+C     FIRST INITIALIZE BS TO ZERO
+      BS = 0.
+
+      CALL NEOART(NS,NC,NAR,NZM,ZSP,M,T,DEN,DS,RHO,EPS,
+     +     ISEL,FILE,NREG,SIGMA,NLEG,NENERGY,NCOF,
+     +     NEOGEO,NEOFRC,IC,EPARN,COEFF)
+
+C     ADD UP THE CURRENTS
+      DO  I= 1, NS
+         DO  J=1, NC(I)
+            BS = BS + COEFF(I,J,3)
+         ENDDO
+      ENDDO
+
+      RETURN 
+      END      
