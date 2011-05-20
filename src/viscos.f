@@ -1,245 +1,204 @@
 
-      subroutine viscos(nsdecl, nzdecl, nsl, is, ic, nreg, 
-     +              bgradp, fc, fm, mmx, nenergy, epsn, ntau, m, 
-     +              t, xi, den, ncl, mu)
-c--------------------------------------------------------------------
-c     this routine calculates the viscosity coefficients using the 
-c     expressions of k.c. shaing, phys. plasmas 3 965 (1996)
-c     extended to the 3 laguerre polynomial expansion
-c
-c     input   nsdecl         : maximum number of species
-c             nzdecl         : maximum number of charge states
-c             nsl            : the actual number of species
-c             is             : the species number for which the 
-c                              viscosity is to be calculated
-c             ic             : the charge state for which the visc-
-c                              osity is to be calculated.
-c             nreg           : integer that determines what regime
-c                              is to be forced in the calculation 
-c                              of the viscosity
-c                              0 = weigted over all regimes
-c                              1 = the banana regimes is forced
-c                              other = the pfirsch schlueter regime
-c                              is forced. 
-c             bgradp         : the flux surface quantity n in grad t
-c                              (the inner product of the unit vector
-c                              in the direction of the magnetic field
-c                              and the gradient of the poloidal 
-c                              angle)
-c             fc             : the number of passing particles
-c             fm             : the coefficients necessary to calculate
-c                              the viscosity in the pfirsch schlueter
-c                              regime.
-c             mmx            : the number of coefficients fm
-c             epsn           : the accuracy with which the numerical
-c                              coeficients should be calculated. 
-c                              note that the accuracy of the analytic
-c                              equations implemented here is not 
-c                              expected to be larger than 10% in 
-c                              certain collisional regimes. when epsn = 0., 
-c                              the value 0.001 will be assumed.
-c             ntau           : array(nsdecl+1,nsdecl+1) the collision 
-c                              frequency n_i m_i / ntau_ij
-c             m              : array(nsdecl+1) the masses of the species 
-c                              in kg
-c             t              : array(nsdecl+1) temperature of the species 
-c                              in kev
-c             xi             : array(nsdecl+1,nzdecl) relative weigth of a 
-c                              charge state.
-c             den            : array(nsdecl+1,nzdecl) density in 
-c                              unit 10^19 m^-3
-c             ncl            : array(nsdecl+1) that gives the number of 
-c                              charge states per species.
-c     output  mu             : array(3,3) the viscosity coefficients
-c
-c     the routine calls the following subroutine
-c     viscol    : routine that calculates the energy dependent 
-c                 collision and energy scattering frequency
-c     perr      : routine that does the error handling.
-c--------------------------------------------------------------------
+      SUBROUTINE VISCOS(NSM, NCM, NS, IS, IC, NREG, BGRADP, FC, FM, 
+     +              MMX, NENERGY, EPS, TAU, M, T, XI, DEN, NCC, MU)
+C--------------------------------------------------------------------
+C     THIS ROUTINE CALCULATES THE VISCOSITY COEFFICIENTS USING THE 
+C     EXPRESSIONS OF K.C. SHAING, PHYS. PLASMAS 3 965 (1996)
+C     EXTENDED TO THE 3 LAGUERRE POLYNOMIAL EXPANSION
+C
+C     INPUT   NSM            : MAXIMUM NUMBER OF SPECIES. THIS PAR-
+C                              AMETER IS GIVEN TO THE ROUTINE TO 
+C                              CHECK INTERNAL CONSISTENCY
+C             NCM            : MAXIMUM NUMBER OF CHARGE STATES, USED
+C                              FOR CHECK ON INTERNAL CONSISTENCY
+C             NS             : THE ACTUAL NUMBER OF SPECIES
+C             IS             : THE SPECIES NUMBER FOR WHICH THE 
+C                              VISCOSITY IS TO BE CALCULATED
+C             IC             : THE CHARGE STATE FOR WHICH THE VISC-
+C                              OSITY IS TO BE CALCULATED.
+C             NREG           : INTEGER THAT DETERMINES WHAT REGIME
+C                              IS TO BE FORCED IN THE CALCULATION 
+C                              OF THE VISCOSITY
+C                              0 = WEIGTED OVER ALL REGIMES
+C                              1 = THE BANANA REGIMES IS FORCED
+C                              OTHER = THE PFIRSCH SCHLUETER REGIME
+C                              IS FORCED. 
+c             BGRADP         : THE FLUX SURFACE QUANTITY N IN GRAD T
+C                              (THE INNER PRODUCT OF THE UNIT VECTOR
+C                              IN THE DIRECTION OF THE MAGNETIC FIELD
+C                              AND THE GRADIENT OF THE POLOIDAL 
+C                              ANGLE)
+C             FC             : THE NUMBER OF PASSING PARTICLES
+C             FM             : THE COEFFICIENTS NECESSARY TO CALCULATE
+C                              THE VISCOSITY IN THE PFIRSCH SCHLUETER
+C                              REGIME.
+C             MMX            : THE NUMBER OF COEFFICIENTS FM
+C             EPS            : THE ACCURACY WITH WHICH THE NUMERICAL
+C                            : COEFICIENTS SHOULD BE CALCULATED. 
+C                              NOTE THAT THE ACCURACY OF THE ANALYTIC
+C                              EQUATIONS IMPLEMENTED HERE IS NOT 
+C                              EXPECTED TO BE LARGER THAN 10% IN 
+C                              CERTAIN COLLISIONAL REGIMES. WHEN EPS = 0., 
+C                              THE VALUE 0.001 WILL BE ASSUMED.
+C             TAU            : ARRAY(NSM,NSM) THE COLLISION FREQUENCY
+C                              N_I M_I / TAU_IJ
+C             M              : ARRAY(NSM) THE MASSES OF THE SPECIES 
+C                              IN KG
+C             T              : ARRAY(NSM) TEMPERATURE OF THE SPECIES 
+C                              IN KEV
+C             XI             : ARRAY(NSM,NCM) RELATIVE WEIGTH OF A 
+C                              CHARGE STATE.
+C             DEN            : ARRAY(NSM,NCM) DENSITY IN UNIT 10^19 M^-3
+C             NCC            : ARRAY(NSM) THAT GIVES THE NUMBER OF 
+C                              CHARGE STATES PER SPECIES.
+C     OUTPUT  MU             : ARRAY(3,3) THE VISCOSITY COEFFICIENTS
+C
+C     THE ROUTINE CALLS THE FOLLOWING SUBROUTINE
+C     VISCOL    : ROUTINE THAT CALCULATES THE ENERGY DEPENDENT 
+C                 COLLISION AND ENERGY SCATTERING FREQUENCY
+C     PERR      : ROUTINE THAT DOES THE ERROR HANDLING.
+C--------------------------------------------------------------------
        
-      use b2mod_types
+      IMPLICIT NONE
 
-      implicit none
+      REAL*8  EPS, MU, TAU, T, M, XI, DEN
+      INTEGER NENERGY, NSM, NCM, NCC, IS, IC, NS, NREG
+      INTEGER MMX,I,J,NV,K
+      LOGICAL NLTEST, NLERR
+      DIMENSION MU(3,3), TAU(NSM,NSM), T(NSM), M(NSM), XI(NSM,NCM),
+     +          NCC(NSM), DEN(NSM,NCM)
+      REAL*8 BGRADP, TWOPI, FC, FT, PI, X, DUM, VTH,
+     +       NUD, NUE, NUT, KB, KPS, OMMN, NTOM, KTOT, VOORF,
+     +       DX, WEIGHT, MEANMUO
+      REAL*8 FM(MMX), A(6), MUO(3,3)
 
-      real (kind=R8) ::
-     *       epsn, mu(3,3), ntau(0:nsdecl,0:nsdecl), t(0:nsdecl), 
-     &       m(0:nsdecl), xi(0:nsdecl,0:nzdecl-1), 
-     &       den(0:nsdecl,0:nzdecl-1)
-      integer ::
-     *     nenergy, nsdecl, nzdecl, ncl(0:nsdecl), is, ic, nsl, nreg
-      integer ::
-     *     mmx,i,j,nv,k,l
-      logical nlerr
-      real (kind=R8) ::
-     *       bgradp, twopi, fc, ft, pi, x, dum, vth,
-     +       nud, nue, nut, kb, kps, ommn, ntom, ktot, voorf,
-     +       dx, weight, meanmuo
-      real (kind=R8) ::
-     *       fm(mmx), a(6), muo(3,3)
-      real (kind=R8) ::
-     *       xpoints(1:25600), cxi(1:25600)
+      NLTEST = .FALSE.
 
-c     calculate vth
-      vth = sqrt(2.*1.6e-16*t(is)/m(is))
+C     CALCULATE VTH
+      VTH = SQRT(2.*1.6E-16*T(IS)/M(IS))
 
-c     the constant pi, 2 pi
-      pi = 4.*atan(1.)
-      twopi = 2.*pi
+C     THE CONSTANT PI, 2 PI
+      PI = 4.*ATAN(1.)
+      TWOPI = 2.*PI
 
-c     the constants to approximate the nut*irm function
-      a(1) = 2. / 5.
-      a(2) = - 22. / 105.
-      a(3) = 6. / 35.
-      a(4) = - 34. / 231.
-      a(5) = 166. / 1287.
-      a(6) = - 82. / 715.
+C     THE CONSTANTS TO APPROXIMATE THE NUT*IRM FUNCTION
+      A(1) = 2. / 5.
+      A(2) = - 22. / 105.
+      A(3) = 6. / 35.
+      A(4) = - 34. / 231.
+      A(5) = 166. / 1287.
+      A(6) = - 82. / 715.
 
 
-      ft = 1.- fc
+      FT = 1.- FC
 
-      nv = 100
-      do k = 1, 3
-        do l = 1, 3
-          muo(k,l) = 0.
-        enddo
-      enddo
- 3000 continue
+      NV = 100
+      DO 2500 K = 1, 9
+        MUO(K,1) = 0.
+ 2500 CONTINUE
+ 3000 CONTINUE
 
-c       the loop over the velocity
-        dx = 10./real(nv)
-        do k = 1, 3
-          do l = 1, 3
-            mu(k,l) = 0.
-          enddo
-        enddo
+C       THE LOOP OVER THE VELOCITY
+        DX = 10./REAL(NV)
+        DO 3050 K = 1, 9
+          MU(K,1) = 0.
+ 3050   CONTINUE
 
-*   ..integration via Simpson rule
+        DO 3100 I = 0, NV 
 
-        do i = 0, nv 
-
-          x = i*dx
-          ommn = vth * x * bgradp
+          X = I*DX
+          OMMN = VTH * X * BGRADP
         
-c         now calculate the collision and energy scattering 
-c         frequency. 
+          IF (I.EQ.0) THEN
 
-          if (i.eq.0) then
+            VOORF = 0.
+ 
+          ELSE 
 
-           voorf = 0.
+c         NOW CALCULATE THE COLLISION AND ENERGY SCATTERING 
+C         FREQUENCY. 
+          CALL VISCOL(NSM, NCM, NS, IS, IC, TAU, M, T, XI, NCC, X,
+     +                DEN, NUD, NUE)
+          NUT = 3*NUD + REAL(NENERGY)*NUE
 
-          else
+          KB  = FT * NUD / FC
+          KPS = 0.
+          DO 3200 J = 1, MMX
+            NTOM = NUT / ( OMMN * REAL(J) )
+            IF (NTOM.LT.10) THEN
+              DUM  = -1.5*NTOM**2 - 4.5*NTOM**4 + 
+     +             (0.25+(1.5+2.25*NTOM**2)*NTOM**2)*2*NTOM *
+     +             ATAN(1/NTOM)
+            ELSE
+              NTOM = (1. / NTOM)**2 
+              DUM = A(1)
+              DO 3300 K = 2, 6
+                DUM = DUM + A(K)*NTOM**(K-1)
+ 3300         CONTINUE
+            ENDIF
+            KPS = KPS + FM(J)*DUM
+ 3200     CONTINUE
+          KPS = KPS * 1.5 * (VTH * X)**2/NUT
+          IF (NREG.EQ.0) THEN
+            KTOT = KB*KPS/(KB+KPS)
+          ELSE
+            IF (NREG.EQ.1) THEN
+              KTOT = KB
+            ELSE 
+              KTOT = KPS
+            ENDIF
+          ENDIF
+          IF ((NLTEST).AND.(NV.EQ.100)) THEN
+            WRITE(*,*)NUD/(X*VTH), KTOT/(X*VTH)
+          ENDIF
 
-           call viscol(nsdecl, nzdecl, nsl, is, ic, ntau, m, t, xi, 
-     +                 ncl, x, den, nud, nue)
-           nut = 3*nud + real(nenergy)*nue
+          VOORF = X**4 * EXP(-X**2)*KTOT*DX/3.
 
-
-
-           kb  = ft * nud / fc
-           kps = 0.
-           do j = 1, mmx
-             ntom = nut / ( ommn * real(j) )
-             if (ntom.lt.10) then
-               dum  = -1.5*ntom**2 - 4.5*ntom**4 + 
-     +              (0.25+(1.5+2.25*ntom**2)*ntom**2)*2*ntom *
-     +              atan(1/ntom)
-             else
-               ntom = (1. / ntom)**2 
-               dum = a(1)
-               do k = 2, 6
-                 dum = dum + a(k)*ntom**(k-1)
-               enddo
-             endif
-             kps = kps + fm(j)*dum
-           enddo
-           kps = kps * 1.5 * (vth * x)**2/nut
-           if (nreg.eq.0) then
-            ktot = kb*kps/(kb+kps)
-           else
-             if (nreg.eq.1) then
-               ktot = kb
-             else 
-               ktot = kps
-             endif
-           endif
-
-           voorf = x**4 * exp(-x**2)*ktot*dx/3.
-
-          endif
+          ENDIF
 
           if ((i.eq.0).or.(i.eq.nv)) then
              weight=1.
            else
              weight=2.*2.**mod(i,2)
           endif
-          mu(1,1) = mu(1,1) + weight*voorf
-          mu(1,2) = mu(1,2) + weight*voorf*(x**2-2.5)
-          mu(2,2) = mu(2,2) + weight*voorf*(x**2-2.5)**2
-          mu(1,3) = mu(1,3) + weight*voorf*(35./8.-3.5*x**2 
-     +                        + 0.5*x**4)
-          mu(2,3) = mu(2,3) + weight*voorf*(35./8.-3.5*x**2 
-     +                        + 0.5*x**4)*(x**2-2.5)
-          mu(3,3) = mu(3,3) + weight*voorf*(35./8.-3.5*x**2 
-     +                        + 0.5*x**4)**2
-        
 
-          if (nv.eq.25600) then
-            xpoints(i) = x
-            cxi(i) = voorf/dx
-          endif
+          MU(1,1) = MU(1,1) + weight*VOORF
+          MU(1,2) = MU(1,2) + weight*VOORF*(X**2-2.5)
+          MU(2,2) = MU(2,2) + weight*VOORF*(X**2-2.5)**2
+          MU(1,3) = MU(1,3) + weight*VOORF*(35./8.-3.5*X**2 + 
+     +              0.5*X**4)
+          MU(2,3) = MU(2,3) + weight*VOORF*(35./8.-3.5*X**2 + 
+     +              0.5*X**4)*(X**2-2.5)
+          MU(3,3) = MU(3,3) + weight*VOORF*(35./8.-3.5*X**2 + 
+     +              0.5*X**4)**2
+                      
+ 3100   CONTINUE
 
-        enddo
-
-        voorf = 1.e19*den(is,ic)*m(is)* 8. / (3.*sqrt(pi))
-        mu(2,1) = mu(1,2)
-        mu(3,1) = mu(1,3)
-        mu(3,2) = mu(2,3)
-        meanmuo = 0.
-        do k = 1, 3
-          do l = 1, 3
-            mu(k,l) = mu(k,l) * voorf
-            meanmuo = meanmuo + abs(mu(k,l))
-          enddo
-        enddo
-        meanmuo = meanmuo/9.
-        nlerr = .false.
-        do k = 1, 3
-          do l = 1, 3
-            if (abs(mu(k,l)-muo(k,l)).gt.abs(epsn*mu(k,l))) then
-              if (nv.gt.100) then
-                write(*,*) 'WARNING: refinement for viscosity'//
-     +                     ' integral needed'
-                write(*,*) 'mu(',k,',',l,')=',mu(k,l)
-                write(*,*) 'voorf =',voorf
-                write(*,*) 'nv=',nv
-              endif
-*    ..neglect errors in minority coefficients
-              if (abs(mu(k,l)).gt.(epsn*meanmuo)) then
-                nlerr = .true.
-              endif
-            endif
-          enddo
-        enddo
-        if (nlerr) then
-          do k = 1, 3
-            do l = 1, 3
-              muo(k,l) = mu(k,l)
-            enddo
-          enddo
-          nv = nv*2
-          if (nv.gt.4e6) then
-            open(16,file='viscos.dat',form='unformatted')
-            write(16) (xpoints(i),i=1,25600)
-            write(16) (cxi(i),i=1,25600)
-            close(16)
-            call perr(4)
-          endif
-          goto 3000
-        endif
+        VOORF = 1.E19*DEN(IS,IC)*M(IS)* 8. / (3.*SQRT(PI))
+        MU(2,1) = MU(1,2)
+        MU(3,1) = MU(1,3)
+        MU(3,2) = MU(2,3)
+        MEANMUO = 0.
+        DO 3150 K = 1, 9
+          MU(K,1) = MU(K,1) * VOORF
+          MEANMUO = MEANMUO + MU(K,1)
+ 3150   CONTINUE
+        MEANMUO = MEANMUO / 9.
+        NLERR = .FALSE.
+        DO 3160 K = 1, 9
+          IF (ABS(MU(K,1)-MUO(K,1)).GT.ABS(EPS*MU(K,1))) THEN 
+            IF (ABS(MU(K,1)).GT.EPS*MEANMUO) NLERR = .TRUE.
+          ENDIF
+ 3160   CONTINUE
+        IF (NLERR) THEN
+          DO 3170 K = 1, 9
+            MUO(K,1) = MU(K,1)
+ 3170     CONTINUE
+          NV = NV*2
+          IF (NV.GT.4e6) CALL PERR(4)
+          GOTO 3000
+        ENDIF
          
 
-      return 
-      end
-
-
+      RETURN 
+      END
