@@ -5,6 +5,8 @@ SRCDIR = ../src
 RUNDIR = ../run
 FFLAGS =   
 
+vpath %.f $(SRCDIR)
+
 $(RUNDIR)/neoart : RUNME.o c1.o c2.o c3.o k22.o psflux.o ralf.o    \
 	dandv.o ps.o bp.o viscos.o visfus.o viscol.o get_geom.o    \
 	menn.o penq.o colxi.o perr.o geom.o circgeom.o visgeom.o   \
