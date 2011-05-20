@@ -1,2 +1,2 @@
 all : run/neoart
-	gmake -C obj -f ../src/Makefile
+	gmake -C obj -f ../src/neoart.mk
