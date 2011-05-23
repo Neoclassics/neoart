@@ -4,7 +4,7 @@ C     CALCULATE THE TRANSPORT COEFFICIENTS IN THE BANANA REGIME
 C     FOR A SIMPLE HYDROGEN PLASMA AND COMPARE THEM WITH THE 
 C     VALUES GIVEN IN THE LITERATURE.
 C-----------------------------------------------------------------
-c     CALL TEST1
+      CALL TEST1
 
 C-----------------------------------------------------------------
 C     CALCULATE THE TRANSPORT COEFFICIENTS IN THE P.S. REGIME 
@@ -16,14 +16,14 @@ c     CALL TEST2
 C-----------------------------------------------------------------
 C     TEST THE REDUCED CHARGE STATE METHOD
 C-----------------------------------------------------------------
-C     CALL TEST3
+c     CALL TEST3
 
 C-----------------------------------------------------------------
 C     CALCULATE THE TRANSPORT COEFFICIENTS OF AN PLASMA CONTAINING
 C     OF HYDROGEN AND OXYGEN, AND COMPARE THEM WITH THE ANALYTIC 
 C     EXPRESSIONS OF HIRSHMANN AND SIGMAR.
 C-----------------------------------------------------------------
-C     CALL TEST4
+c     CALL TEST4
 
 C-----------------------------------------------------------------
 C     CALCULATE THE HEAT TRANSPORT OF A PLASMA CONTAINING
@@ -31,21 +31,21 @@ C     OF HYDROGEN AND OXYGEN, AND COMPARE THEM WITH THE ANALYTIC
 C     EXPRESSIONS OF HIRSHMANN AND SIGMAR, AND THE DERIVED 
 C     EXPRESSION KEEPING FINITE  MASS RATIO EFFECTS.
 C-----------------------------------------------------------------
-C     CALL TEST5
+c     CALL TEST5
 
 C-----------------------------------------------------------------
 C     EXAMPLE: THE ION HEAT CONDUCTIVITY OF A PURE PLASMA: THE 
 C     TRANSITION FROM THE COLLISIONAL CASE TO THE COLLISIONLESS
 C     CASE.
 C-----------------------------------------------------------------
-C     CALL TEST6
+c     CALL TEST6
 
 C-----------------------------------------------------------------
 C     EXAMPLE: THE SCREENING OF CARBON IN AN HYDROGEN PLASMA: 
 C     THE TRANSITION FROM THE COLLISIONAL TO THE COLLISIONLESS
 C     CASE. 
 C-----------------------------------------------------------------
-C     CALL TEST7
+c     CALL TEST7
 
 C-----------------------------------------------------------------
 C     CALCULATE THE HEAT TRANSPORT OF A PLASMA CONTAINING
@@ -117,14 +117,6 @@ C-----------------------------------------------------------------
 C     TEST THE HAMADA COORDINATE VERSION OF THE GEOMETRY DEPEN-
 C     DENT QUANTITIES
 C-----------------------------------------------------------------
-      CALL TEST17
+c      CALL TEST17
 
-C-----------------------------------------------------------------
-C     THE ASDEX UPGRADE IMPURITY TRANSPORT EXPERIMENTS. 
-C-----------------------------------------------------------------
-      do 1 i = 1, 100
-c     CALL RALF
-1     continue
- 
-      
       END
