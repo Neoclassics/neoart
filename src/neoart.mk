@@ -3,7 +3,8 @@
 FC = mpif90 
 SRCDIR = ../src
 RUNDIR = ../run
-FFLAGS =   
+FFLAGS = -O3 -ftracer -fomit-frame-pointer -pipe -fweb -fdefault-real-8
+
 
 vpath %.f $(SRCDIR)
 
