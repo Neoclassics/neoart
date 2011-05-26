@@ -11,7 +11,7 @@ C     CALCULATE THE TRANSPORT COEFFICIENTS IN THE P.S. REGIME
 C     FOR A SIMPLE HYDROGEN PLASMA AND COMPARE THEM WITH THE 
 C     VALUES GIVEN IN THE LITERATURE.
 C-----------------------------------------------------------------
-c     CALL TEST2
+      CALL TEST2
  
 C-----------------------------------------------------------------
 C     TEST THE REDUCED CHARGE STATE METHOD
