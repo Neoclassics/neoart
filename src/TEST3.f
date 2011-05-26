@@ -7,14 +7,17 @@ C-----------------------------------------------------------------
       IMPLICIT NONE
 
       INTEGER NS,NC,NAR,ISEL,NREG,NLEG,NENERGY,NCOF,
-     +        IC,NZM,I,J,NMAXGR, K
-      REAL*8 M,T,DEN,DS,CFF1,CFF2,EPS, SIGMA, ZSP
+     +        IC,NZM,I,J,NMAXGR, K, ISHOT
+      REAL*8 M,T,DEN,DS,CFF1,CFF2,EPS, SIGMA, ZSP, EPARR
       REAL*8 RHO, RN, E, Q, BN, MAXA
       LOGICAL NEOGEO, NEOFRC
 
-      PARAMETER(NAR = 5)
-      PARAMETER(NZM = 30)
+      include 'elem_config.inc'
+      
+      parameter(NAR = NELMAX+2)
+      parameter(NZM = NIONMAX)
       PARAMETER(NMAXGR = 1000)
+
 
       DIMENSION NC(NAR),ZSP(NAR,NZM),M(NAR),T(NAR),DEN(NAR,NZM),
      +          DS(NAR,NZM,2),CFF1(NAR,NZM,4),CFF2(NAR,NZM,4),
@@ -43,6 +46,13 @@ C     USE ION-ELECTRON COLLISIONS
       NCOF = 1
 C     IN THE FIRST CALL THE MATRICES HAVE TO BE CALCULATED
       NEOFRC = .FALSE.
+C     RECALCULATE THE GEOMETRY PARAMETERS 
+      NEOGEO = .TRUE. 
+C     SET THE ELECTRIC FIELD TO ZERO 
+      EPARR = 0. 
+C     NO SHOT NUMBER GIVEN 
+      ISHOT = 0 
+
 C     USE ALL COUPLINGS IN THE PFIRSCH SCHLUETER REGIME
       SIGMA(1) = 1
       SIGMA(2) = 1
@@ -74,9 +84,9 @@ C     THE DENSITY OF THE SPECIES IN 10^19 M^-3
       DEN(3,1) = 0.75
       DEN(2,2) = 0.75 
 C     THE TEMPERATURE IN KEV
-      T(1) =  0.001
-      T(2) =  0.001
-      T(3) =  0.001
+      T(1) =  0.01
+      T(2) =  0.01
+      T(3) =  0.01
 C     THE BANANA AND PS REGIME
       DO 10000 IC = 1, 2
 
@@ -103,8 +113,8 @@ C     THE THERMODYNAMIC FORCES
       IF (K.EQ.6) DS(3,1,2) = 1.
 
       CALL NEOART(NS,NC,NAR,NZM,ZSP,M,T,DEN,DS,RHO,EPS,
-     +            ISEL,NREG,SIGMA,NLEG,NENERGY,NCOF,
-     +            NEOGEO,NEOFRC,IC,CFF1)
+     +            ISEL,ISHOT,NREG,SIGMA,NLEG,NENERGY,NCOF,
+     +            NEOGEO,NEOFRC,IC,EPARR,CFF1)
 
 C     NOW REPEAT THE CALCULTION
       NS = 2
@@ -123,8 +133,8 @@ C     NOW REPEAT THE CALCULTION
       IF (K.EQ.6) DS(2,2,2) = 1.
 
       CALL NEOART(NS,NC,NAR,NZM,ZSP,M,T,DEN,DS,RHO,EPS,
-     +            ISEL,NREG,SIGMA,NLEG,NENERGY,NCOF,
-     +            NEOGEO,NEOFRC,IC,CFF2)
+     +            ISEL,ISHOT,NREG,SIGMA,NLEG,NENERGY,NCOF,
+     +            NEOGEO,NEOFRC,IC,EPARR,CFF2)
 
       DO 103 I = 1, 6-2*IC 
         MAXA = MAX(MAXA,(CFF1(1,1,I)-CFF2(1,1,I))/CFF1(1,1,I))
