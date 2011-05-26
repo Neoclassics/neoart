@@ -23,7 +23,7 @@ C     CALCULATE THE TRANSPORT COEFFICIENTS OF AN PLASMA CONTAINING
 C     OF HYDROGEN AND OXYGEN, AND COMPARE THEM WITH THE ANALYTIC 
 C     EXPRESSIONS OF HIRSHMANN AND SIGMAR.
 C-----------------------------------------------------------------
-c     CALL TEST4
+      CALL TEST4
 
 C-----------------------------------------------------------------
 C     CALCULATE THE HEAT TRANSPORT OF A PLASMA CONTAINING
@@ -31,7 +31,7 @@ C     OF HYDROGEN AND OXYGEN, AND COMPARE THEM WITH THE ANALYTIC
 C     EXPRESSIONS OF HIRSHMANN AND SIGMAR, AND THE DERIVED 
 C     EXPRESSION KEEPING FINITE  MASS RATIO EFFECTS.
 C-----------------------------------------------------------------
-c     CALL TEST5
+      CALL TEST5
 
 C-----------------------------------------------------------------
 C     EXAMPLE: THE ION HEAT CONDUCTIVITY OF A PURE PLASMA: THE 
