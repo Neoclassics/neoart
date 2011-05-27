@@ -12,7 +12,7 @@ C             NAR       : ACTUAL (FIRST) DIMENSION OF THE ZSP,DEN,
 C                         AND DS ARRAY, USED FOR CHECKING CONSISTENCY
 C             NZM       : ACTUAL (SECOND) DIMENS. OF ARRAY (CONSIS.)
 C             ZSP       : ARRAY(NAR,NZM) OF REAL THAT CONTAINS
-C                         THE CARGE NUMBER OF EVERY COMPONENT
+C                         THE CHARGE NUMBER OF EVERY COMPONENT
 C             M         : ARRAY(NS) THAT CONTAINS THE MASS OF 
 C                         EVERY SPECIES IN KG
 C             T         : ARRAY(NS) THAT CONTAINS THE TEMPERATURE
@@ -46,6 +46,9 @@ C                           ROUTINE VISGEOM
 C                         2 ASSUME CIRCULAR GEOMETRY AND USE CIRC-
 C                           GEOM TO DETERMINE THE PARAMETERS
 C                         3 READ FROM FILE
+C                         4 READ FROM CHEASE OUTPUT, IN THAT CASE
+C                           THE FLUX SURFACE LABEL IS 
+C                           RHO=(RMAX-RMIN)/2/R0EXP as in GKW
 C             ISHOT     : SHOT NUMBER, ONLY USED WHEN ISEL = 3
 C             NREG      : PARAMETER THAT FORCES A CERTAIN REGIME
 C                         IN THE CALCULATION OF THE VISCOSITY.
@@ -154,7 +157,7 @@ C--------------------------------------------------------------------
      +          RNQ(NKEEP),UAI(NSM,NCM,3),LAB(3,3,NSM,NSM),
      +          MM(3,3),NN(3,3)
 
-      SAVE XI, LA, LAB, DENI, TAU
+      SAVE XI, LA, LAB, DENI, TAU, IT
 
 C     STORE THE GEOMETRY DEPENDENT VARIABLES
       COMMON / KGEOM / BAV, B2AV, BGRADP, FC, FM, MMX, RHOK,

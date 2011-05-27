@@ -98,8 +98,10 @@ C     CHECK WHETHER THE MATRICES HAVE TO BE RECALCULATED
 C     CALCULATE THE VISCOSITY
       DO 600 I = 1, NS
         DO 600 J = 1, NC(I)
-          DO 610 K = 1, 9
-            VISC(K,1,I,J) = 0.
+          DO 610 K = 1, 3
+          DO 610 L = 1, 3
+            VISC(K,L,I,J) = 0.
+ 611      CONTINUE
  610      CONTINUE
           NLTEST = .FALSE.
           CALL VISCOS(NSM, NCM, NS, I, J, NREG, BGRADP, FC, FM, MMX, 
@@ -113,8 +115,10 @@ C     CALCULATE THE VISCOSITY
 c     CALCULATE THE A MATRICES
       DO 1000 I = 1, NS 
         DO 1000 J = 1, NC(I)
-          DO 1200 K = 1, 9
-            AAA(K,1,I,J) = 0.
+          DO 1200 K = 1, 3
+          DO 1201 L = 1, 3
+            AAA(K,L,I,J) = 0.
+ 1201     CONTINUE
  1200     CONTINUE
           DO 1300 K = 1, 3
             AAA(K,K,I,J) = 1.
@@ -125,8 +129,10 @@ c     CALCULATE THE A MATRICES
  1100     CONTINUE
 C         DO THE LU DECOMPOSITION
           CALL LUDCMP(AAA(1,1,I,J),3,3,INDX,D)
-          DO 1400 K = 1, 9
-            AKP(K,1) = 0.
+          DO 1400 K = 1, 3
+          DO 1401 L = 1, 3
+            AKP(K,L) = 0.
+ 1401     CONTINUE
  1400     CONTINUE
           DO 1500 K = 1, 3
             AKP(K,K) = 1.
@@ -134,8 +140,10 @@ C         DO THE LU DECOMPOSITION
           DO 1600 K = 1, 3
             CALL LUBKSB(AAA(1,1,I,J),3,3,INDX,AKP(1,K))
  1600     CONTINUE
-          DO 1700 K = 1, 9
-            AAA(K,1,I,J) = AKP(K,1)
+          DO 1700 K = 1, 3
+          DO 1701 L = 1, 3
+            AAA(K,L,I,J) = AKP(K,L)
+ 1701     CONTINUE
  1700     CONTINUE
 
  1000 CONTINUE
@@ -149,12 +157,15 @@ C     NOW CALCULATE THE MATRIX FOR INVERSION
         AINV(I,I) = 1.
  2100 CONTINUE
       DO 2200 I = 1, NS
-        DO 2300 K = 1, 9
-          AKP(K,1) = 0.
+        DO 2300 K = 1, 3
+        DO 2301 L = 1, 3
+          AKP(K,L) = 0.
+ 2301   CONTINUE
  2300   CONTINUE
-        DO 2400 K = 1, 9
+        DO 2400 K = 1, 3
+        DO 2400 L = 1, 3
           DO 2400 J = 1, NC(I)
-            AKP(K,1) = AKP(K,1) + XI(I,J)**2*AAA(K,1,I,J)
+            AKP(K,L) = AKP(K,L) + XI(I,J)**2*AAA(K,L,I,J)
  2400   CONTINUE
         DO 2500 J = 1, NS
           DO 2500 K = 1, NLEG

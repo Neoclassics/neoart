@@ -63,7 +63,7 @@ C--------------------------------------------------------------------
 
       REAL  EPS, MU, TAU, T, M, XI, DEN
       INTEGER NENERGY, NSM, NCM, NCC, IS, IC, NS, NREG
-      INTEGER MMX,I,J,NV,K
+      INTEGER MMX,I,J,NV,K,L
       LOGICAL NLTEST, NLERR
       DIMENSION MU(3,3), TAU(NSM,NSM), T(NSM), M(NSM), XI(NSM,NCM),
      +          NCC(NSM), DEN(NSM,NCM)
@@ -93,15 +93,19 @@ C     THE CONSTANTS TO APPROXIMATE THE NUT*IRM FUNCTION
       FT = 1.- FC
 
       NV = 100
-      DO 2500 K = 1, 9
-        MUO(K,1) = 0.
+      DO 2500 K = 1, 3
+      DO 2501 L = 1, 3
+        MUO(K,L) = 0
+ 2501 CONTINUE
  2500 CONTINUE
  3000 CONTINUE
 
 C       THE LOOP OVER THE VELOCITY
         DX = 10./REAL(NV)
-        DO 3050 K = 1, 9
-          MU(K,1) = 0.
+        DO 3050 K = 1, 3
+        DO 3051 L = 1, 3
+          MU(K,L) = 0.
+ 3051   CONTINUE
  3050   CONTINUE
 
         DO 3100 I = 0, NV 
@@ -179,20 +183,26 @@ C         FREQUENCY.
         MU(3,1) = MU(1,3)
         MU(3,2) = MU(2,3)
         MEANMUO = 0.
-        DO 3150 K = 1, 9
-          MU(K,1) = MU(K,1) * VOORF
-          MEANMUO = MEANMUO + MU(K,1)
+        DO 3150 K = 1, 3
+        DO 3151 L = 1, 3
+          MU(K,L) = MU(K,L) * VOORF
+          MEANMUO = MEANMUO + MU(K,L)
+ 3151   CONTINUE
  3150   CONTINUE
         MEANMUO = MEANMUO / 9.
         NLERR = .FALSE.
-        DO 3160 K = 1, 9
-          IF (ABS(MU(K,1)-MUO(K,1)).GT.ABS(EPS*MU(K,1))) THEN 
-            IF (ABS(MU(K,1)).GT.EPS*MEANMUO) NLERR = .TRUE.
+        DO 3160 K = 1, 3
+        DO 3161 L = 1, 3
+         IF (ABS(MU(K,L)-MUO(K,L)).GT.ABS(EPS*MU(K,L))) THEN 
+            IF (ABS(MU(K,L)).GT.EPS*MEANMUO) NLERR = .TRUE.
           ENDIF
+ 3161   CONTINUE
  3160   CONTINUE
         IF (NLERR) THEN
-          DO 3170 K = 1, 9
-            MUO(K,1) = MU(K,1)
+          DO 3170 K = 1, 3
+          DO 3171 L = 1, 3
+            MUO(K,L) = MU(K,L)
+ 3171     CONTINUE
  3170     CONTINUE
           NV = NV*2
           IF (NV.GT.4e6) CALL PERR(4)

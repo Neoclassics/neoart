@@ -179,19 +179,23 @@ c     now calculate the ha coefficients
  
       do 800 i = 1, ns
         gk(i) = 0.
-        do 700 k = 1, 4
-          rmo(k,1,i) = 0.
-          rmoo(k,1,i) = 0.
-          rmooo(k,1,i) = 0.
+        do 700 k = 1, 2
+        do 701 l = 1, 2
+          rmo(k,l,i) = 0.
+          rmoo(k,l,i) = 0.
+          rmooo(k,l,i) = 0.
+ 701    continue
  700    continue
         do 800 j = 1, nc(i)
           dum1 = xi(i,j)**2/den(i,j)
           dum2 = xi(i,j)*dum1/den(i,j)
           gk(i) = gk(i) + dum1
-          do 750 k = 1, 4
-            rmo(k,1,i) = rmo(k,1,i)+ xi(i,j)*rm(k,1,i,j)
-            rmoo(k,1,i) = rmoo(k,1,i)+dum1*rm(k,1,i,j)
-            rmooo(k,1,i) = rmooo(k,1,i)+dum2*rm(k,1,i,j)
+          do 750 k = 1, 2
+          do 751 l = 1, 2
+            rmo(k,l,i) = rmo(k,l,i)+ xi(i,j)*rm(k,l,i,j)
+            rmoo(k,l,i) = rmoo(k,l,i)+dum1*rm(k,l,i,j)
+            rmooo(k,l,i) = rmooo(k,l,i)+dum2*rm(k,l,i,j)
+751       continue
 750       continue
 800   continue
  
