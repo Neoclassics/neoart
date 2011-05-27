@@ -13,7 +13,8 @@ C-----------------------------------------------------------------
       INTEGER ISEL, MMX, I, ISHOT, J
       REAL RHO, E, Q, BN, RN, EPS, BAV1, B2AV1, BI2A1, RBT1, 
      +       BGRADP1, DPSIDR1, RNQ1, FC1, FM1, BAV2, B2AV2, 
-     +       BI2A2, RBT2, BGRADP2, DPSIDR2, RNQ2, FC2, FM2
+     +       BI2A2, RBT2, BGRADP2, DPSIDR2, RNQ2, FC2, FM2,
+     +       R2I
       DIMENSION FM1(NMG), FM2(NMG)
 
       ishot = 1001
@@ -38,13 +39,13 @@ C     COPY THEM INTO THE VALUES USED BY THE CODE
       EPS = 1E-6
 
       CALL GEOM(NMG,ISEL,ISHOT,RHO,EPS,BAV1,B2AV1,BI2A1,RBT1,BGRADP1,
-     +          DPSIDR1,RNQ1,FC1,FM1,MMX)
+     +          DPSIDR1,RNQ1,FC1,FM1,MMX,R2I)
       
       ISEL = 2
       EPS = 1E-6
 
       CALL GEOM(NMG,ISEL,ISHOT,RHO,EPS,BAV2,B2AV2,BI2A2,RBT2,BGRADP2,
-     +          DPSIDR2,RNQ2,FC2,FM2,MMX)
+     +          DPSIDR2,RNQ2,FC2,FM2,MMX,R2I)
       
       write(*,*)'Epsilon ',e
       WRITE(*,1000)'BAV    ',BAV1, BAV2

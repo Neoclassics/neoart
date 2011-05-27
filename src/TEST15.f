@@ -9,13 +9,15 @@ C-----------------------------------------------------------------
       integer nsm, ncm
       INTEGER NMAXGR, ISEL
 
-      PARAMETER(NMAXGR = 100000)
-      parameter(nsm = 5)
-      parameter(ncm = 30)
+      include 'elem_config.inc'
+      
+      parameter(NAR = NELMAX+2)
+      parameter(NZM = NIONMAX)
+      PARAMETER(NMAXGR = 1000)
 
-      integer i, j, k, itel, ns, nc, 
+      integer i, j, k, itel, ns, nc, ishot,  
      +        it, IC, NLEG, NREG, NCOF, NENERGY
-      real tau, xi, sigma,  mas, temp, ZSP,
+      real tau, xi, sigma,  mas, temp, ZSP, eparr
      +       den, rho, coeff, EPS, Q, RN, BN, norm, alpha,
      +       l1,l2,l3,l11tt,l11th,l12th,DS,e
       LOGICAL NEOFRC, NEOGEO
@@ -88,6 +90,8 @@ C     CALCULATE THE PFIRSCH SCHLUETER CONTRIBUTION
 
       NEOGEO = .TRUE.
       NEOFRC = .FALSE. 
+      ishot  = 0 
+      eparr = 0. 
 
 C     SET THE THERMODYNAMIC FORCES
       do 2000 i = 1, ns
@@ -101,8 +105,8 @@ C     SET THE THERMODYNAMIC FORCES
       EPS = 1E-5
 
       CALL NEOART(NS,NC,NSM,NCM,ZSP,MAS,TEMP,DEN,DS,RHO,EPS,
-     +            ISEL,NREG,SIGMA,NLEG,NENERGY,NCOF,
-     +            NEOGEO,NEOFRC,IC,COEFF)
+     +            ISEL,ISHOT,NREG,SIGMA,NLEG,NENERGY,NCOF,
+     +            NEOGEO,NEOFRC,IC,EPARR,COEFF)
 
 
 C     NOW CALCULATE THE NORMALIZED COLLISION FREQUENCIES

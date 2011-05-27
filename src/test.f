@@ -126,14 +126,20 @@ C-----------------------------------------------------------------
 C     TEST THE DANDV ROUTINE. A PURE PLASMA IN THE BANANA 
 C     PLATEAU REGIME 
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST16  '
-C     CALL TEST16
+      WRITE(*,*)'START TEST16  '
+      CALL TEST16
 
 C-----------------------------------------------------------------
 C     TEST THE HAMADA COORDINATE VERSION OF THE GEOMETRY DEPEN-
 C     DENT QUANTITIES
 C-----------------------------------------------------------------
 C      WRITE(*,*)'START TEST17  '
-c      CALL TEST17
+C      CALL TEST17
+
+c-----------------------------------------------------------------
+C     TEST THE CONTRIBUTION FROM THE LOOP VOTAGE 
+C-----------------------------------------------------------------
+      WRITE(*,*)'START TEST18'
+      CALL TEST18
 
       END

@@ -1,4 +1,4 @@
-      PROGRAM TEST18
+      SUBROUTINE TEST18
 C-----------------------------------------------------------------
 C     TEST THE DANDV ROUTINE. A PURE PLASMA IN THE BANANA 
 C     PLATEAU REGIME 

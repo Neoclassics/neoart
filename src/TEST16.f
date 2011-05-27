@@ -1,6 +1,6 @@
 
 
-      PROGRAM TEST16
+      SUBROUTINE TEST16
 C-----------------------------------------------------------------
 C     TEST THE DANDV ROUTINE. A PURE PLASMA IN THE BANANA 
 C     PLATEAU REGIME 
@@ -10,9 +10,6 @@ C-----------------------------------------------------------------
       INTEGER NS,NC,NAR,ISEL,NZM,I,J,NMAXGR,IC,ID,ISHOT
       REAL M,T,DEN,DS,XI,TAU, EPS, NORM, DD, VV, ZSP
       REAL RHO, RN, E, Q, BN, VT, EPARR
-
-c      PARAMETER(NAR = 5)
-c      PARAMETER(NZM = 30)
 
       include 'elem_config.inc'
       
