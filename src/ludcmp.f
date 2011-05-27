@@ -4,10 +4,10 @@
       IMPLICIT NONE
       
       INTEGER n,np,indx(n),NMAX
-      REAL*8 d,a(np,np),TINY
+      REAL d,a(np,np),TINY
       PARAMETER (NMAX=500,TINY=1.0e-20)
       INTEGER i,imax,j,k
-      REAL*8 aamax,dum,sum,vv(NMAX)
+      REAL aamax,dum,sum,vv(NMAX)
       d=1.
       do 12 i=1,n
         aamax=0.
