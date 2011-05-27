@@ -43,16 +43,16 @@ C     EXAMPLE: THE ION HEAT CONDUCTIVITY OF A PURE PLASMA: THE
 C     TRANSITION FROM THE COLLISIONAL CASE TO THE COLLISIONLESS
 C     CASE.
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST6   '
-c     CALL TEST6
+      WRITE(*,*)'START TEST6   '
+      CALL TEST6
 
 C-----------------------------------------------------------------
 C     EXAMPLE: THE SCREENING OF CARBON IN AN HYDROGEN PLASMA: 
 C     THE TRANSITION FROM THE COLLISIONAL TO THE COLLISIONLESS
 C     CASE. 
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST7   '
-c     CALL TEST7
+      WRITE(*,*)'START TEST7   '
+      CALL TEST7
 
 C-----------------------------------------------------------------
 C     CALCULATE THE HEAT TRANSPORT OF A PLASMA CONTAINING
@@ -60,8 +60,8 @@ C     OF HYDROGEN AND A HEAVY IMPURITY, AND COMPARE THEM WITH
 C     THE ANALYTIC EXPRESSIONS OF HIRSHMANN AND SIGMAR.
 C     HERE ALSO ENERGY COUPLING IS CONSIDERED. 
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST8   '
-C     CALL TEST8
+      WRITE(*,*)'START TEST8   '
+      CALL TEST8
 
 C-----------------------------------------------------------------
 C     CALCULATE THE HEAT TRANSPORT OF A PLASMA CONTAINING
@@ -69,8 +69,8 @@ C     OF HYDROGEN AND OXYGEN, AND COMPARE THEM WITH THE ANALYTIC
 C     EXPRESSIONS OF HIRSHMANN AND SIGMAR.
 C     ALSO ENERGY COUPLING IS CONSIDERED HERE.
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST9   '
-c     CALL TEST9
+      WRITE(*,*)'START TEST9   '
+      CALL TEST9
  
 C-----------------------------------------------------------------
 C     CALCULATE THE HEAT TRANSPORT OF A PLASMA CONTAINING
@@ -80,8 +80,8 @@ C     HERE THE HYDROGEN HEAT FLUX IS CALCULATED AS A FUNCTION
 C     OF THE IMPURITY CONTENT (GIVEN BY ALPHA) FOR DIFFERENT 
 C     CHARGE STATES OF THE OXYGEN.
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST10  '
-C     CALL TEST10
+      WRITE(*,*)'START TEST10  '
+      CALL TEST10
 
 C-----------------------------------------------------------------
 C     CALCULATE THE HEAT TRANSPORT OF A PLASMA CONTAINING
