@@ -61,16 +61,16 @@ C--------------------------------------------------------------------
        
       IMPLICIT NONE
 
-      REAL*8  EPS, MU, TAU, T, M, XI, DEN
+      REAL  EPS, MU, TAU, T, M, XI, DEN
       INTEGER NENERGY, NSM, NCM, NCC, IS, IC, NS, NREG
       INTEGER MMX,I,J,NV,K
       LOGICAL NLTEST, NLERR
       DIMENSION MU(3,3), TAU(NSM,NSM), T(NSM), M(NSM), XI(NSM,NCM),
      +          NCC(NSM), DEN(NSM,NCM)
-      REAL*8 BGRADP, TWOPI, FC, FT, PI, X, DUM, VTH,
+      REAL BGRADP, TWOPI, FC, FT, PI, X, DUM, VTH,
      +       NUD, NUE, NUT, KB, KPS, OMMN, NTOM, KTOT, VOORF,
      +       DX, WEIGHT, MEANMUO
-      REAL*8 FM(MMX), A(6), MUO(3,3)
+      REAL FM(MMX), A(6), MUO(3,3)
 
       NLTEST = .FALSE.
 

@@ -21,7 +21,7 @@ C--------------------------------------------------------------------
       IMPLICIT NONE
 
       INTEGER NSM,NCM,I,J,NS,NC,K,L
-      REAL*8 DEN,T,M,DENE,LNAB,TAU,XI,TCONS,ZSP
+      REAL DEN,T,M,DENE,LNAB,TAU,XI,TCONS,ZSP
       DIMENSION ZSP(NSM,NCM),NC(NSM),DEN(NSM,NCM),T(NSM),
      +          M(NSM),XI(NSM,NCM),TAU(NSM,NSM)
  

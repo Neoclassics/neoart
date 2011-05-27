@@ -61,7 +61,7 @@ C--------------------------------------------------------------------
 
       INTEGER NS, NC, ISEL, NREG, NLEG, NENERGY, NCOF, IC, ID,
      +        I, J, K, L, MT, NAR, NZM, ISHOT
-      REAL*8 M, T, DEN, DS, DSL, RHO, EPS, SIGMA, COEFF, DD, VV,
+      REAL M, T, DEN, DS, DSL, RHO, EPS, SIGMA, COEFF, DD, VV,
      +       ZSP, VT, EPARR, EPARN
       LOGICAL NEOFRC, NEOGEO
 

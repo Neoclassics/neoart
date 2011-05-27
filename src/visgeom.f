@@ -24,7 +24,7 @@ C--------------------------------------------------------------------
 
       IMPLICIT NONE
 
-      REAL*8 RHO, THET, BT, RN, Q, EPS, CHI, CHIO, TWOPI, BGRADP, B,
+      REAL RHO, THET, BT, RN, Q, EPS, CHI, CHIO, TWOPI, BGRADP, B,
      +       B0, RBT, E, DPSIDR
       INTEGER ITEL
 

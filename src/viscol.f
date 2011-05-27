@@ -38,8 +38,8 @@ C--------------------------------------------------------------------
       IMPLICIT NONE
 
       INTEGER NSM, NCM, IS, IC, NC, I, NS 
-      REAL*8 TAU,M,T,XI,X,NUD,NUE,DEN,ERF
-      REAL*8 PH, G, PI, XAB
+      REAL TAU,M,T,XI,X,NUD,NUE,DEN,ERF
+      REAL PH, G, PI, XAB
       DIMENSION TAU(NSM,NSM), M(NSM), T(NSM), XI(NSM,NCM), NC(NSM),
      +          DEN(NSM,NCM)
 

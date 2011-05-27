@@ -50,7 +50,7 @@ C--------------------------------------------------------------------
 
       INTEGER NS, NC, ISEL, NREG, NLEG, NENERGY, NCOF, IC,
      +        I, J, K, L, MT, NAR, NZM
-      REAL*8 M, T, DEN, DS, DSL, RHO, EPS, SIGMA, COEFF, CHI, 
+      REAL M, T, DEN, DS, DSL, RHO, EPS, SIGMA, COEFF, CHI, 
      +       ZSP, EPARN
       CHARACTER*(*) FILE
       LOGICAL NEOFRC, NEOGEO

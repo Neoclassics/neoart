@@ -16,7 +16,7 @@ C--------------------------------------------------------------------
 
       IMPLICIT NONE
 
-      REAL*8 TA, TB, MA, MB, MM, NN, XAB, TAB, MAB
+      REAL TA, TB, MA, MB, MM, NN, XAB, TAB, MAB
       DIMENSION MM(3,3), NN(3,3)
 
       TAB = TA / TB

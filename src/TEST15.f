@@ -15,7 +15,7 @@ C-----------------------------------------------------------------
 
       integer i, j, k, itel, ns, nc, 
      +        it, IC, NLEG, NREG, NCOF, NENERGY
-      real*8 tau, xi, sigma,  mas, temp, ZSP,
+      real tau, xi, sigma,  mas, temp, ZSP,
      +       den, rho, coeff, EPS, Q, RN, BN, norm, alpha,
      +       l1,l2,l3,l11tt,l11th,l12th,DS,e
       LOGICAL NEOFRC, NEOGEO

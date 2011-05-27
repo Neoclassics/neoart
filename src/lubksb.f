@@ -4,9 +4,9 @@
       IMPLICIT NONE
       
       INTEGER n,np,indx(n)
-      REAL*8 a(np,np),b(n)
+      REAL a(np,np),b(n)
       INTEGER i,ii,j,ll
-      REAL*8 sum
+      REAL sum
       ii=0
       do 12 i=1,n
         ll=indx(i)

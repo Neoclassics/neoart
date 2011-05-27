@@ -50,7 +50,7 @@ C--------------------------------------------------------------------
 
       integer i,j,k,l,indx, m, n, ns, nc, mt, nt, kt, lt, ms, 
      +        NSC, NCC
-      real*8 pab,qab,la,lab,tau,xi,kab,oa,ha,gk,
+      real pab,qab,la,lab,tau,xi,kab,oa,ha,gk,
      +       aaa,a1,a2,a3,LG,da,dnom,rm,rmo,rmoi,
      +       dv,ev,fv,d,b,uo,uoo,sor,soro,soroo,
      +       uaio,uai,sigma,mas,temp,den,uaioo,

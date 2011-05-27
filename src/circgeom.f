@@ -25,7 +25,7 @@ C--------------------------------------------------------------------
 
       IMPLICIT NONE
 
-      REAL*8 E, RN, Q, BN, RHO, EK, RNK, QK, BNK
+      REAL E, RN, Q, BN, RHO, EK, RNK, QK, BNK
       INTEGER IT
 
       SAVE EK, RNK, QK, BNK

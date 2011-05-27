@@ -5,7 +5,7 @@ c     this routine computes the error function.
 c------------------------------------------------------
       IMPLICIT NONE
 
-      REAL*8 ERF, XXX, A, PI, TUSQPI, SIGN, XCG, X2, 
+      REAL ERF, XXX, A, PI, TUSQPI, SIGN, XCG, X2, 
      +       SUM, TERM, T1, T2, P, ETA, PHIP
       INTEGER K, KMAX
 

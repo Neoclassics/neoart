@@ -8,8 +8,8 @@ C-----------------------------------------------------------------
       IMPLICIT NONE
 
       INTEGER NS,NC,NAR,ISEL,NZM,I,J,NMAXGR,IC,ID,ISHOT
-      REAL*8 M,T,DEN,DS,XI,TAU, EPS, NORM, DD, VV, ZSP
-      REAL*8 RHO, RN, E, Q, BN, VT, EPARR
+      REAL M,T,DEN,DS,XI,TAU, EPS, NORM, DD, VV, ZSP
+      REAL RHO, RN, E, Q, BN, VT, EPARR
 
 c      PARAMETER(NAR = 5)
 c      PARAMETER(NZM = 30)

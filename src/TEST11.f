@@ -13,9 +13,9 @@ C-----------------------------------------------------------------
 
       INTEGER NS,NC,NAR,ISEL,NREG,NLEG,NENERGY,NCOF,
      +        IC,NZM,I,J,NMAXGR,K, L
-      REAL*8 M,T,DEN,DS,CFF4,XI,TAU,C3,ZSP,
+      REAL M,T,DEN,DS,CFF4,XI,TAU,C3,ZSP,
      +       EPS, SIGMA, NORM, ALPHA, OMTH, OMTI, RESUL
-      REAL*8 RHO, RN, E, Q, BN
+      REAL RHO, RN, E, Q, BN
       LOGICAL NEOGEO, NEOFRC
 
       PARAMETER(NAR = 5)

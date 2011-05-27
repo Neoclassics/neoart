@@ -11,7 +11,7 @@ C-----------------------------------------------------------------
       PARAMETER(NMG = 1000)
 
       INTEGER ISEL, MMX, I, ISHOT, J
-      REAL*8 RHO, E, Q, BN, RN, EPS, BAV1, B2AV1, BI2A1, RBT1, 
+      REAL RHO, E, Q, BN, RN, EPS, BAV1, B2AV1, BI2A1, RBT1, 
      +       BGRADP1, DPSIDR1, RNQ1, FC1, FM1, BAV2, B2AV2, 
      +       BI2A2, RBT2, BGRADP2, DPSIDR2, RNQ2, FC2, FM2
       DIMENSION FM1(NMG), FM2(NMG)

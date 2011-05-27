@@ -8,8 +8,8 @@ C-----------------------------------------------------------------
 
       INTEGER NS,NC,NAR,ISEL,NREG,NLEG,NENERGY,NCOF,
      +        IC,NZM,I,J,NMAXGR,L,NMG,mmx
-      REAL*8 M,T,DEN,DS,CFF4,XI,TAU, EPS, SIGMA, NORM, RESUL
-      REAL*8 RHO, RN, E, Q, BN, BAV, B2AV, BI2A, RBT, BGRADP,
+      REAL M,T,DEN,DS,CFF4,XI,TAU, EPS, SIGMA, NORM, RESUL
+      REAL RHO, RN, E, Q, BN, BAV, B2AV, BI2A, RBT, BGRADP,
      +       DPSIDR, RNQ, FC, FM, ZSP
       LOGICAL NEOGEO, NEOFRC
 

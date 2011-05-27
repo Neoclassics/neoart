@@ -43,7 +43,7 @@ C--------------------------------------------------------------------
 
       INTEGER NS, NC, ISEL, NREG, NLEG, NENERGY, NCOF, IC,
      +        I, J, NAR, NZM
-      REAL*8 M, T, DEN, DS, RHO, EPS, SIGMA, COEFF,
+      REAL M, T, DEN, DS, RHO, EPS, SIGMA, COEFF,
      +       ZSP,  BS, EPARN
       
       CHARACTER*(*) FILE

@@ -134,12 +134,12 @@ C--------------------------------------------------------------------
       PARAMETER(NMAXGR = 1000)
 
       INTEGER NZM,NAR,ISEL,NREG,NLEG,NENERGY,NCOF,IC
-      REAL*8 DS,EPARR
+      REAL DS,EPARR
       LOGICAL NEOGEO, NEOFRC
 
       INTEGER NS,NC,MMX,IKEEP,IT,I,J,ISK,ISHOT,
      +        K,L
-      REAL*8 M,RHO,DEN,T,TAU,COEFF,ZSP,EPARN,R2I,
+      REAL M,RHO,DEN,T,TAU,COEFF,ZSP,EPARN,R2I,
      +       EPS,BAV,B2AV,BGRADP,FC,FM,XI,RHOK,
      +       BI2A,RBT,DPSIDR,RNQ,UAI,SIGMA, DUM, LA, LAB, MM, NN,
      +       DENI,TA,TB,MA,MB,GCLASS,COEFFC

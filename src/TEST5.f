@@ -10,9 +10,9 @@ C-----------------------------------------------------------------
 
       INTEGER NS,NC,NAR,ISEL,NREG,NLEG,NENERGY,NCOF,
      +        IC,NZM,I,J,NMAXGR,L,ISHOT
-      REAL*8 M,T,DEN,DS,CFF4,XI,TAU,C3,ZSP,
+      REAL M,T,DEN,DS,CFF4,XI,TAU,C3,ZSP,
      +       EPS, SIGMA, NORM, ALPHA, OMTH, OMTI, RESUL, EPARR
-      REAL*8 RHO, RN, E, Q, BN
+      REAL RHO, RN, E, Q, BN
       LOGICAL NEOGEO, NEOFRC
 
       include 'elem_config.inc'

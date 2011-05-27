@@ -6,7 +6,7 @@ C     FOR THE PARTICLE FLUX OF A TRACE IMPURITY IN AN HYDROGEN
 C     PLASMA WITH AN IMPURITY. (PFIRSCH SCHLUETER REGIME)
       implicit none
 
-      real*8 d0,d1,d2,d3,t,mm,nn,mmh,nnh,mas,mt,mi,zhi,
+      real d0,d1,d2,d3,t,mm,nn,mmh,nnh,mas,mt,mi,zhi,
      +       l1,l2,l3,l11tt,l11th,l12th,c1,c2,den,tau,zsp
       integer i,j, nsm, ncm
 

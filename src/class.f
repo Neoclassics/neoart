@@ -28,7 +28,7 @@ C-----------------------------------------------------------
       IMPLICIT NONE
 
       INTEGER NSM,NCM,NS,NC,I,J,K,L
-      REAL*8  XI,LA,LAB,DS,COEFFC,V,ZSP,T
+      REAL  XI,LA,LAB,DS,COEFFC,V,ZSP,T
 
       DIMENSION NC(NSM), XI(NSM,NCM), LA(3,3,NSM),
      +          LAB(3,3,NSM,NSM), DS(NSM,NCM,2),
