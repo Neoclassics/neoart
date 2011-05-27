@@ -91,36 +91,36 @@ C     HERE THE OXYGEN HEAT FLUX IS CALCULATED AS A FUNCTION
 C     OF THE IMPURITY CONTENT (GIVEN BY ALPHA) FOR DIFFERENT 
 C     CHARGE STATES OF THE OXYGEN.
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST11  '
-c     CALL TEST11
+      WRITE(*,*)'START TEST11  '
+      CALL TEST11
 
 C-----------------------------------------------------------------
 C     CALCULATE THE EPSILON (INVERSE ASPECT RATIO) DEPENDENCE 
 C     OF THE ION HEAT FLUX IN A PURE PLASMA
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST12  '
-c     CALL TEST12
+      WRITE(*,*)'START TEST12  '
+      CALL TEST12
 
 C-----------------------------------------------------------------
 C     COMPARE THE 2 AND 3 LAGUERRE POLYNOMAL EXPANSIONS OF THE 
 C     ION HEAT FLUX AT FINITE INVERSE ASPECT RATIO.
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST13  '
-c     CALL TEST13
+      WRITE(*,*)'START TEST13  '
+      CALL TEST13
  
 C-----------------------------------------------------------------
 C     THE TOTAL OXYGEN PARTICLE FLUX AS A FUNCTION OF NORMALIZED
 C     COLLISIONALITY
 C-----------------------------------------------------------------
-C      WRITE(*,*)'START TEST14  '
-c     CALL TEST14  
+      WRITE(*,*)'START TEST14  '
+      CALL TEST14  
 
 C-----------------------------------------------------------------
 C     THE PARTICLE FLUX OF A TRACE IMPURITY IN AN HYDROGEN 
 C     CARBON PLASMA
 C-----------------------------------------------------------------
 C      WRITE(*,*)'START TEST15  '
-c     CALL TEST15
+C      CALL TEST15
 
 C-----------------------------------------------------------------
 C     TEST THE DANDV ROUTINE. A PURE PLASMA IN THE BANANA 
