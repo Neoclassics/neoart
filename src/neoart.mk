@@ -22,14 +22,14 @@ exec :  RUNME.o  \
 	menn.o penq.o colxi.o perr.o geom.o circgeom.o visgeom.o \
 	erf.o ludcmp.o lubksb.o advance.o interp.o class.o 
 
-test :  test.o c1.o c2.o c3.o k22.o psflux.o ralf.o    \
+test :  test.o c1.o c2.o c3.o k22.o psflux.o   \
 	dandv.o ps.o bp.o viscos.o visfus.o viscol.o get_geom.o    \
 	menn.o penq.o colxi.o perr.o geom.o circgeom.o visgeom.o   \
 	erf.o ludcmp.o lubksb.o advance.o interp.o neoart.o \
 	class.o TEST1.o TEST2.o TEST3.o TEST4.o TEST5.o \
 	TEST6.o TEST7.o TEST8.o TEST9.o TEST10.o TEST11.o \
 	TEST12.o TEST13.o TEST14.o TEST16.o TEST18.o
-	$(FC) $(FFLAGS) -o $(TESTDIR)/test test.o c1.o c2.o c3.o k22.o psflux.o ralf.o   \
+	$(FC) $(FFLAGS) -o $(TESTDIR)/test test.o c1.o c2.o c3.o k22.o psflux.o \
 	dandv.o ps.o bp.o viscos.o visfus.o viscol.o  get_geom.o neoart.o   \
 	menn.o penq.o colxi.o perr.o geom.o circgeom.o visgeom.o \
 	erf.o ludcmp.o lubksb.o advance.o interp.o class.o TEST1.o \
