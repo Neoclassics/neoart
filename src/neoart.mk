@@ -1,12 +1,10 @@
 
 
-FC = mpif90 
 FC = gfortran
 SRCDIR = ../src
 RUNDIR = ../run
 TESTDIR = ../tst
 FFLAGS = -fdefault-real-8 -Wuninitialized 
-# FFLAGS = -r8 -Wuninitialized  
 
 # -O3 -ftracer -fomit-frame-pointer -pipe -fweb -fdefault-real-8
 
