@@ -36,15 +36,15 @@
 !> the routine calls the following subroutines
 !> perr    : for error handling
 !> neoart  : to calculate the fluxes
---------------------------------------------------------------------
+!--------------------------------------------------------------------
 subroutine chis(nar,nzm,ns,nc,zsp,isel,file,ic,m,t,den,ds,rho,eps,chi)
 
   implicit none
 
-  include 'elem_config.inc'
+  include 'elem_config90.inc'
       
-  integer nsm, parameter :: nsm = nelmax+2 
-  integer ncm, parameter :: ncm = nionmax 
+  integer, parameter :: nsm = nelmax+2 
+  integer, parameter :: ncm = nionmax 
 
   integer  ns, nc, isel, nreg, nleg, nenergy, ncof, ic
   integer  i, j, k, l, mt, nar, nzm
