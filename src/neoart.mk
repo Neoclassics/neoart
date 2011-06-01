@@ -16,26 +16,26 @@ exec :  RUNME.o  \
 	dandv.o ps.o bp.o viscos.o visfus.o viscol.o get_geom.o    \
 	menn.o penq.o colxi.o perr.o geom.o circgeom.o visgeom.o   \
 	erf.o ludcmp.o lubksb.o advance.o interp.o neoart.o \
-	class.o
+	class.o get_geom_ch.o
 	$(FC) $(FFLAGS) -o $(RUNDIR)/neoart RUNME.o \
 	dandv.o ps.o bp.o viscos.o visfus.o viscol.o  get_geom.o neoart.o   \
 	menn.o penq.o colxi.o perr.o geom.o circgeom.o visgeom.o \
-	erf.o ludcmp.o lubksb.o advance.o interp.o class.o 
+	erf.o ludcmp.o lubksb.o advance.o interp.o class.o get_geom_ch.o 
 
 test :  test.o c1.o c2.o c3.o k22.o psflux.o   \
-	dandv.o ps.o bp.o viscos.o visfus.o viscol.o get_geom.o    \
+	dandv.o ps.o bp.o viscos.o visfus.o viscol.o get_geom.o get_geom_ch.o   \
 	menn.o penq.o colxi.o perr.o geom.o circgeom.o visgeom.o   \
 	erf.o ludcmp.o lubksb.o advance.o interp.o neoart.o \
 	class.o TEST1.o TEST2.o TEST3.o TEST4.o TEST5.o \
 	TEST6.o TEST7.o TEST8.o TEST9.o TEST10.o TEST11.o \
-	TEST12.o TEST13.o TEST14.o TEST16.o TEST18.o
+	TEST12.o TEST13.o TEST14.o TEST16.o TEST18.o TEST19.o
 	$(FC) $(FFLAGS) -o $(TESTDIR)/test test.o c1.o c2.o c3.o k22.o psflux.o \
-	dandv.o ps.o bp.o viscos.o visfus.o viscol.o  get_geom.o neoart.o   \
+	dandv.o ps.o bp.o viscos.o visfus.o viscol.o  get_geom.o get_geom_ch.o neoart.o   \
 	menn.o penq.o colxi.o perr.o geom.o circgeom.o visgeom.o \
 	erf.o ludcmp.o lubksb.o advance.o interp.o class.o TEST1.o \
 	TEST2.o TEST3.o TEST4.o TEST5.o TEST6.o TEST7.o TEST8.o \
         TEST9.o TEST10.o TEST11.o TEST12.o TEST13.o TEST14.o TEST16.o \
-	TEST18.o 
+	TEST18.o TEST19.o
 
 %.o: %.f
 	$(FC) $(FFLAGS) -c -o $@ $<

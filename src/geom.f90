@@ -283,6 +283,14 @@ subroutine geom(nmg,isel,ishot,rho,eps,bav,b2av,bi2a,rbt,bgradp, &
   
     if (new_read.eq.1) new_read = 0
      
+  ! in this part the coefficients are read from a CHEASE output file
+  case(4)
+
+    call get_geom_ch(new_read, rho, nmaxgr, bav, b2av, bi2a, rbt, bgradp, &
+            &        dpsidr, rnq, fc, gclass, fm, mmx, r2i)
+
+    if (new_read.eq.1) new_read = 0
+
   case default 
     return 
 

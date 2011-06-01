@@ -142,4 +142,11 @@ C-----------------------------------------------------------------
       WRITE(*,*)'START TEST18'
       CALL TEST18
 
+C-----------------------------------------------------------------
+C     TEST THE FULL GEOMETRY VERSION 
+C     WILL READ THE FILE neoart_geom.dat
+C-----------------------------------------------------------------
+      WRITE(*,*)'START TEST19  '
+      CALL TEST19
+
       END
