@@ -1,0 +1,65 @@
+% Transposition of the NEOART test file TEST1.f into a matlab script using the mex function neoart
+%
+%     CALCULATE THE TRANSPORT COEFFICIENTS IN THE BANANA REGIME 
+%     FOR A SIMPLE HYDROGEN PLASMA AND COMPARE THEM WITH THE 
+%     VALUES GIVEN IN THE LITERATURE.
+
+
+
+% Set the parameters for the circular geometry
+      ISEL = 2;
+      RHO = 0.000165;
+      RN = 1.65;
+      E = RHO / RN;
+      BN = 2.5;
+      Q = 2;
+
+%     SET THE ACCURACY
+      EPS = 1E-5;
+%     FORCE THE BANANA REGIME IN THE CALCULATION OF THE TRANSPORT
+%     FLUXES (IN THE CALCULATION OF THE VISCOSITY)
+      NREG = 1;
+%     THE NUMBER OF LEGENDRE HARMONICS
+      NLEG = 3;
+%     USE ENERGY SCATTERING IN THE CALC. OF VISCOSITY
+      NENERGY = 1;
+%     SWITCH OFF ION-ELECTRON COLLISIONS
+      NCOF = 0;
+%     IN THE FIRST CALL THE MATRICES HAVE TO BE CALCULATED
+      NEOFRC = 0;
+	  NEOGEO = 1;
+%     CALCULATE THE BANANA PLATEAU CONTRIBUTION
+      IC = 1;
+%     COUPLING TERMS IN THE PS EQUATION
+      SIGMA= [1 1 1 1];	  
+%     SET EPARALLEL TO 0 
+      EPARR = 0;
+
+% Set the species parameters
+%     THE NUMBER OF SPECIES IS 2
+      NS = 2;
+%     IONS AND ELECTRONS HAVE ONLY ONE CHARGE 
+      NC(1) = 1;
+      NC(2) = 1;
+%     THE MASS OF THE ELECTRON AND PROTON
+      M(1) = 9.1096E-31;
+      M(2) = 1.6727E-27;
+%     THE CHARGE OF THE ELECTRON AND ION
+      ZSP(1,1) = -1;
+      ZSP(2,1) = 1;
+%     THE DENSITY OF THE SPECIES IN 10^19 M^-3
+      DEN(1,1) = 5;
+      DEN(2,1) = 5; 
+%     THE TEMPERATURE IN KEV
+      T(1) = 10;
+      T(2) = 10;
+
+%     THE THERMODYNAMIC FORCES      
+      DS=zeros(NS,max(NC),2);
+      DS(2,1,2) = 1;
+
+[c1,c2,c3,c4]=neoart(NS,NC,M,T,ZSP,DEN,DS,ISEL,RHO,RN,BN,Q,IC,EPARR,EPS,NREG,SIGMA,NLEG,NENERGY,NCOF,NEOGEO,NEOFRC);
+c4(2)
+%uth=c4(2)*DS(2,1,2)
+coeff=c4(2)*1e-3*BN^2*E/Q/T(2)/DS(2,1,2)
+vpol=c4(2)*BN*E/Q
