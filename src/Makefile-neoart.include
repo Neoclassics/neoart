@@ -1,0 +1,29 @@
+NEOART_SOURCES=\
+	advance.f\
+	bp.f90\
+	circgeom.f90\
+	class.f90\
+	colxi.f90\
+	dandv.f90\
+	erf.f\
+	geom.f90\
+	get_geom.f\
+	get_geom_ch.f\
+	interp.f\
+	lubksb.f\
+	ludcmp.f\
+	menn.f90\
+	neoart.f\
+	penq.f90\
+	perr.f\
+	ps.f\
+	viscol.f\
+	viscos.f\
+	visfus.f\
+	visgeom.f\
+
+SOURCES_F90 = $(filter %.f90, $(NEOART_SOURCES))
+SOURCES_F = $(filter %.f, $(NEOART_SOURCES))
+
+NEOART_OBJECTS=$(SOURCES_F90:.f90=.o) $(SOURCES_F:.f=.o)
+

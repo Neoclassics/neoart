@@ -1,0 +1,58 @@
+NEOART
+======
+
+Neoart is a code that calculates the neoclassical transport coefficients for
+toroidal geometry
+
+NOTE: This is a work in progress.  At present only download the code if you
+know what you are doing (and even then you may be disappointed)
+
+Compilation
+-----------
+
+A simple
+
+    make
+
+should do to compile Neoart and the tests.
+
+Building Neoart
+~~~~~~~~~~~~~~~
+
+    make neoart
+
+
+Building the Matlab interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    make matlab
+
+Run matlab and change into the matlab directory.  You should be able to run
+neoart in matlab using the wrapper called by the command 'neoart'.  Type 'help
+neoart' for more information.
+
+You can test your mexfile compilation by running test1.m in matlab. The output
+should be:
+
+ans =
+
+   3.7263e+07
+
+
+coeff =
+
+    1.1645
+
+
+vpol =
+
+   4.6578e+03
+
+
+Compiling and running the tests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Tests are located in the tests directory.  To compile and run all tests:
+
+    $ make tests
+
