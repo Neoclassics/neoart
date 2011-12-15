@@ -1,3 +1,7 @@
+FC = gfortran
+FFLAGS = -fdefault-real-8 -Wuninitialized
+FFLAGS += -fPIC # needed to compile matlab interface
+
 NEOART_SOURCES=\
 	advance.f\
 	bp.f90\

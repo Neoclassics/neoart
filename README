@@ -56,3 +56,13 @@ Tests are located in the tests directory.  To compile and run all tests:
 
     $ make tests
 
+
+Building the Python interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You need to have numpy [1] and the Python development headers installed.
+
+    make python
+
+
+[1] http://www.numpy.org

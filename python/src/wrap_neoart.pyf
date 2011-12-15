@@ -1,0 +1,87 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+! vim: set filetype=fortran :
+
+python module _neoart ! in
+    interface  ! in :neoart
+        subroutine get_elem_config(out_nsm, out_ncm)
+            ! Helper routine to get the NSM and NCM variables.
+            integer,intent(out) :: out_nsm
+            integer,intent(out) :: out_ncm
+        end subroutine get_elem_config
+
+        subroutine circgeom(it, rho, rn, e, q, bn) ! in :neoart:../circgeom.f
+            integer :: it
+            real*8 :: rho
+            real*8,intent(inplace) :: rn
+            real*8,intent(inplace) :: e
+            real*8,intent(inplace) :: q
+            real*8,intent(inplace) :: bn
+        end subroutine circgeom
+
+        subroutine neoart(ns,nc,nar,nzm,zsp,m,t,den,ds,rho,eps,isel,ishot,&
+                            nreg,sigma,nleg,nenergy,ncof,neogeo,neofrc,ic,&
+                            eparr,coeff) ! in :neoart:../neoart.f
+            include "elem_config.inc"
+            integer NSM, NCM
+            parameter(NSM = NELMAX+2)
+            parameter(NCM = NIONMAX)
+
+            integer :: ns               ! number of species
+            integer dimension(ns) :: nc
+            integer :: nar=NSM
+            integer :: nzm=NCM
+            real*8 dimension(NSM,NCM) :: zsp
+            real*8 dimension(ns) :: m
+            real*8 dimension(ns) :: t
+            real*8 dimension(NSM,NCM) :: den
+            real*8 dimension(NSM,NCM,2) :: ds
+            real*8 :: rho
+            real*8 :: eps
+            integer :: isel
+            integer :: ishot
+            integer :: nreg
+            real*8 dimension(4) :: sigma
+            integer :: nleg
+            integer :: nenergy
+            integer :: ncof
+            logical :: neogeo
+            logical :: neofrc
+            integer :: ic
+            real*8 :: eparr
+            real*8 dimension(NSM,NCM,4),intent(out) :: coeff
+
+            common /kgeom/ bav,b2av,bgradp,fc,fm,mmx,rhok,bi2a,rbt,dpsidr,rnq,isk
+            real*8 dimension(NCM) :: bav
+            real*8 dimension(NCM) :: b2av
+            real*8 dimension(NCM) :: bgradp
+            real*8 dimension(NCM) :: fc
+            real*8 dimension(NCM,1000) :: fm
+            integer dimension(NCM) :: mmx
+            real*8 dimension(NCM) :: rhok
+            real*8 dimension(NCM) :: bi2a
+            real*8 dimension(NCM) :: rbt
+            real*8 dimension(NCM) :: dpsidr
+            real*8 dimension(NCM) :: rnq
+            integer dimension(NCM) :: isk
+        end subroutine neoart
+
+        subroutine colxi(nsm,ncm,ns,nc,zsp,den,t,m,tau,xi) ! in :neoart:colxi.f
+                include "elem_config.inc"
+                integer :: ns
+                integer dimension(ns):: nc
+                real*8 dimension(nsm,ncm) :: zsp
+                real*8 dimension(nsm,ncm) :: den
+                real*8 dimension(ns) :: m
+                real*8 dimension(ns) :: t
+
+                real*8 dimension(nsm,nsm), intent(out) :: tau
+                real*8 dimension(nsm,nsm), intent(out) :: xi
+        end subroutine colxi
+
+    end interface
+end python module neoart
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
