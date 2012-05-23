@@ -195,31 +195,32 @@ c*************************************************************
          enddo
          
          close(finum)
-      endif
 c
-      do i=1, npsi
-         rnq_l(i) = 1./bgradp_l(i)
-      enddo
+         do i=1, npsi
+           rnq_l(i) = 1./bgradp_l(i)
+         enddo
 c
-      if (rho_in.gt.rho_l(npsi)) goto 9010
+         if (rho_in.gt.rho_l(npsi)) goto 9010
 c
 c     intperpolate
 c
-      npoly=2
-      
-      bav_out = interp(rho_l,bav_l,npsi,npoly,rho_in)
-      b2av_out = interp(rho_l,b2av_l,npsi,npoly,rho_in)
-      bi2a_out = interp(rho_l,bi2a_l,npsi,npoly,rho_in)
-      rbt_out = interp(rho_l,rbt_l,npsi,npoly,rho_in)
-      bgradp_out = interp(rho_l,bgradp_l,npsi,npoly,rho_in)
-      dpsidr_out = interp(rho_l,dpsidr_l,npsi,npoly,rho_in)
-      rnq_out = interp(rho_l,rnq_l,npsi,npoly,rho_in)
-      fc_out = interp(rho_l,fc_l,npsi,npoly,rho_in)
-      gclass_out = interp(rho_l,gclass_l,npsi,npoly,rho_in)
-      r2i_out = interp(rho_l,r2i_l,npsi,npoly,rho_in)
-      do k=1,mmx_l
-       fm_out(k) = interp(rho_l,fm_l(1:npsi,k),npsi,npoly,rho_in)
-      enddo
+         npoly=2
+
+         bav_out = interp(rho_l,bav_l,npsi,npoly,rho_in)
+         b2av_out = interp(rho_l,b2av_l,npsi,npoly,rho_in)
+         bi2a_out = interp(rho_l,bi2a_l,npsi,npoly,rho_in)
+         rbt_out = interp(rho_l,rbt_l,npsi,npoly,rho_in)
+         bgradp_out = interp(rho_l,bgradp_l,npsi,npoly,rho_in)
+         dpsidr_out = interp(rho_l,dpsidr_l,npsi,npoly,rho_in)
+         rnq_out = interp(rho_l,rnq_l,npsi,npoly,rho_in)
+         fc_out = interp(rho_l,fc_l,npsi,npoly,rho_in)
+         gclass_out = interp(rho_l,gclass_l,npsi,npoly,rho_in)
+         r2i_out = interp(rho_l,r2i_l,npsi,npoly,rho_in)
+         do k=1,mmx_l
+           fm_out(k) = interp(rho_l,fm_l(1:npsi,k),npsi,npoly,rho_in)
+         enddo
+
+      endif
       return
 c==================================================================
 c
