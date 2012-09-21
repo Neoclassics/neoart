@@ -5,10 +5,10 @@ Go to the neoart/matlab directory. This directory should include the files neoar
 
 str0 = ' ../src/advance.f ../src/circgeom.f90 ../src/get_geom.f ../src/menn.f90';
 str1 = ' ../src/bp.f90 ../src/visfus.f';
-str2 = ' ../src/class.f90 ../src/interp.f ../src/neoart.f ../src/visgeom.f ../src/c1.f90 ../src/colxi.f90';
-str3 = ' ../src/jboot.f ../src/penq.f90 ../src/get_geom_ch.f ../src/c2.f90 ../src/dandv.f90 ../src/k22.f';
-str4 = ' ../src/perr.f ../src/c3.f90 ../src/erf.f ../src/lubksb.f ../src/ps.f ../src/viscol.f';
-str5 = ' ../src/chis.f90  ../src/geom.f90 ../src/ludcmp.f ../src/psflux.f90 ../src/viscos.f';
+str2 = ' ../src/class.f90 ../src/interp.f ../src/neoart.f ../src/visgeom.f ../src/colxi.f90';
+str3 = ' ../src/jboot.f ../src/penq.f90 ../src/get_geom_ch.f ../src/dandv.f90';
+str4 = ' ../src/perr.f  ../src/erf.f ../src/lubksb.f ../src/ps.f ../src/viscol.f';
+str5 = ' ../src/chis.f90  ../src/geom.f90 ../src/ludcmp.f ../src/viscos.f';
 str=[str0 str1 str2 str3 str4 str5];
 
 eval(['mex -fortran -v  ''FC=gfortran'' ''FFLAGS=-fdefault-real-8 -Wuninitialized -fexceptions -fPIC -fno-omit-frame-pointer'' -output neoart neoart_top.f90' str])
