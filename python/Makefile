@@ -11,7 +11,7 @@ neoart_so = neoart/_neoart.so
 all: $(neoart_so)
 
 tests: $(neoart_so)
-	nosetests -w tests
+	nosetests #-w neoart.tests
 
 $(neoart_so):
 	python setup.py config_fc --f77flags="$(FFLAGS)"\

@@ -1,273 +1,98 @@
-__all__ = ['neoart', 'colxi']
-
 import numpy as np
-import _neoart
+
+from geometry import GeometryStrategy
+from species import CompositeSpecies
+from transport import TransportCoefficients
+from arguments import Arguments, DefaultNumericArgs
+import core
 
 
-def neoart(nc, zsp, mass, temperature, density, forces, geometry,
-        eparr=0., contribution='all', eps=1e-5, force_viscosity=0,
-        sigma=(1, 1, 1, 1), nleg=3, energy_scattering=True,
-        electron_ion_collisions=True):
+class Neoart(object):
     """
-    Compute neoclassical fluxes using NEOART.
-
-    Parameters
-    ----------
-    nc : sequence of ints
-        Number of charge states per species.  The length of `nc` defines the
-        number of species: ns = len(nc)
-    zsp : ndarray
-        Charge number of all the charge states of all species.
-        shape = (number of species, maximal number of charge states)
-    mass : array_like
-        Species mass in kg. The length of the array must be equal to the
-        number of species: len(mass) = nc.
-    temperature : array_like
-        Species temperature in keV.  The length of the array must be equal to
-        the number of species: len(mass) = nc.
-    density : array_like
-        Density of the charge states in 1e19 m-3.  The shape must be (ns, max(nc)).
-    forces : array_like
-        Pressure and temperature gradients. The shape is (ns, max(nc), 2).
-
-            forces[i, j, 1] = -d ln(p_i_j)/drho
-            forces[i, j, 2] = -d ln(T_i)/drho
-
-        for the j-th charge state of the i-th species. ds > 0 for peaked
-        profile.
-    geometry : dict
-        Geometry selection.  The dictionary must contain the following keys:
-            rho : Flux surface label.
-            rn  : Major radius of the magnetic axis.
-            e   : Inverse aspect ratio of the surface.
-            q   : Safety factor of the flux surface.
-            bn  : Magnetic field strentgh in chi = pi / 1 with chi being the
-                  poloidal angle.
-    eparr : float
-        Loop voltage [V] divided by 2pi.
-    contribution : str
-        The contribution for which the coefficients are calculated.
-            'cl' : the classical particle flux
-            'bp' : banana-plateau contribution
-            'ps' : Pfirsch-Schlueter contribution
-            'all': banana-plateau, classical, and Pfirsch-Schlueter
-    eps : float
-        Accuracy.
-    force_viscosity : int
-        Force a certain regime in the calculation of the viscosity.
-            0     : the default value. the banana and Pfirsch-Schlueter
-                    contributions are weighted.
-            1     : the banana regime is forced.
-            other : the Pfirsch-Schlueter regime is forced.
-
-        Note: forcing the banana regime is not the same thing as calculating
-        the banana plateau contribution. for high collision freq. this contri-
-        bution usually decreases. when force_viscosity = 1 there is no such
-        decr.
-    sigma : array_like
-        The sigma's determine which of the coupling terms in the equation for
-        the Pfirsch-Schlueter regime are taken into account.
-    nleg : int
-        number of legendre polynomals in the expansion (maximum and normal
-        value is 3)
-    energy_scattering : bool
-        Parameter that determines whether energy scattering is taken into
-        account in the calculation of the viscosity.
-            True  : accounted for (default value)
-            False : not accounted for
-    electron_ion_collisions : bool
-        Parameters that determines whether ion-electron collisions are taken
-        into account or not taken into account (default value: True)
-
-        Note: use False only to obtain some analytic results.
-
-    Returns
-    -------
-    fluxes : ndarray
-        (ns, max(nc), 4) shaped array with the fluxes:
-        * particle flux, positive values for outward flux:
-
-            fluxes[i, j, 0] = <Gamma_ij . grad_rho>,
-
-          with Gamma_ij in 1/m^2/s and <.> the flux surface average
-        * heat flux, positive values for outward flux
-
-            fluxes[i, j, 1] = <Q_ij . grad_rho>/T_i
-
-          with Q_ij/T_i in 1/m^2/s
-        * parallel flow
-
-            fluxes[i, j, 2] = q_ij*n_ij*<u_ij . B><B>/<B^2>
-
-          with q_ij*n_ij*u_ij the current density of species i,j in A/m^2
-        * poloidal flow
-
-            fluxes[i, j, 3] = <u_ij.grad_theta>/<B.grad_theta>
-
-          in m/s/T with u_ij the flow of species i,j in m/s.
+    Main Neoart object.
 
     Example
     -------
 
-    Two species (electron and proton) with equal temperature and density.  The
-    only non-zero thermodynamic force is the ion temperature gradient.  The
-    fluxes are evaluated in the banana-plateau regime.
-    >>> nc = [1, 1]
-    >>> zsp = [[-1], [1]]
-    >>> mass = [9.1096e-31, 1.6727e-27] # kg
-    >>> density = [[5], [5]] # 1e19 m^-3
-    >>> temperature = [10, 10] # keV
+    Two species (electron and deuterium) with equal temperature and density.
+    The ion temperature gradient is non-zero, while the pressure gradient for
+    both species is zero.  Fluxes are evaluated in the banana-plateau regime.
 
-    >>> forces = np.zeros((2,1,2))
-    >>> forces[1,0,1] = 1 # ion temperature gradient
-    >>> g = dict(rho=0.000165, Rmag=1.65, q=2, bn=2.5)
-    >>> coeff = neoart.neoart(nc, zsp, mass, temperature, density, forces,
-                geometry=g, contribution='bp')
+    >>> from neoart import *
+    >>> e = ('electron', {'density': 5, 'density gradient': 0,
+        ...               'temperature': 10, 'temperature gradient': 0,
+        ...               'eps':1e-5})
+    >>> d = ('deuterium', {'density': 5, 'density gradient': -1,
+    ...                   'temperature': 10, 'temperature gradient': 1})
+    ...                   'eps':1e-5})
+    >>> species = [e, d]
+
+    Use circular geometry
+    >>> eps = 1e-4 #  inverse aspect ratio
+    >>> geometry = CircularGeometry(minor_radius=eps*1.65, major_radius=1.65,
+    ...                             safety_factor=2, magnetic_field=2.5)
+
+    We use the default numerical parameters, but we change the contribution
+    >>> numerical = DefaultNumericArgs()
+    >>> numerical.set_contribution('banana-plateau')
+
+    >>> n = Neoart(species, geometry, numerical)
+    >>> f = n.fluxes()
+
+    Compute the fluxes with parallel electric field
+    >>> f = n.flxues(eparr=0.1)
     """
-    nc, m, temp = np.atleast_1d(nc, mass, temperature)
-    den, zsp = np.atleast_2d(density, zsp)
-    ds = np.atleast_3d(forces)
 
-    n_species = np.alen(nc)
-    max_nc = max(nc)
+    def __init__(self, species=None, geometry=None, numerical=None, **kwargs):
+        self.set_numerical(numerical)
+        self.set_geometry(geometry)
+        self.set_species(species)
+        self.extra_args = kwargs
 
-    assert den.shape == (n_species, max_nc)
-    assert zsp.shape == (n_species, max_nc)
-    assert ds.shape == (n_species, max_nc, 2)
+    def fluxes(self, **kwargs):
+        self._geometry.pre(self)
+        fluxes = []
+        for a in self.get_args(kwargs):
+            self._geometry.at_each_rho(a)
+            fluxes.append(self._call_neoart(a))
+        self._geometry.post(self)
 
-    shape_ = _neoart.get_elem_config()
-    zsp_ = np.zeros(shape_)
-    den_ = np.zeros(shape_)
-    ds_ = np.zeros(shape_ + (2,))
+        return np.array(fluxes)
 
-    den_[:n_species, :max_nc] = den
-    zsp_[:n_species, :max_nc] = zsp
-    ds_[:n_species, :max_nc] = ds
+    def set_geometry(self, geometry=None):
+        if geometry is None:
+            geometry = GeometryStrategy()
 
-    # Only circular geometry is supported
-    rho, Rmag, q, bn = (geometry[k] for k in ['rho', 'Rmag', 'q', 'bn'])
-    e = rho / Rmag
-    _neoart.circgeom(1, rho, Rmag, e, q, bn)
-    isel = 2
+        self._geometry = geometry
 
-    nreg = force_viscosity
-    sigma = np.array(sigma)
-    nenergy = energy_scattering
-    ncof = electron_ion_collisions
-    # Other parameters needed to call the main routine.
-    ishot = 0
-    neofrc = 0
-    neogeo = 1
+    def set_numerical(self, numerical=None):
+        if numerical is None:
+            numerical = DefaultNumericArgs()
+        self._numerical = numerical
 
-    if contribution in ['cl', 'classical']:
-        ic = 0
-    elif contribution in ['bp', 'banana-plateau']:
-        ic = 1
-    elif contribution in ['ps', 'pfirsch-schlueter']:
-        ic = 2
-    elif contribution in ['all']:
-        ic = 3
-    else:
-        raise NotImplementedError('contribution %s is unknown.' %
-                contribution)
+    def set_species(self, species):
+        self._species = CompositeSpecies(species)
 
-    coeff = _neoart.neoart(nc, zsp_, mass, temperature, den_,
-            ds_, rho, eps, isel, ishot, nreg, sigma, nleg, nenergy,
-            ncof, neogeo, neofrc, ic, eparr)
+    def get_args(self, kwargs={}):
+        args = {}
+        args.update(self.extra_args)
+        args.update(kwargs)
+        return Arguments(self._species, self._geometry, self._numerical,
+                         extra_args=args)
 
-    coeff[:, :, 0] *= -1.
-    coeff[:, :, 1] *= -1.
+    def _call_neoart(self, args):
+        # Neoart accepts any flux surface label as 'rho', but we prefer to use
+        # the more special 'eps' (inverse aspect ratio).  Before calling
+        # neoart we rename the key 'eps' to 'rho'.
+        args['rho'] = args.pop('eps')
+        return core.neoart(**args)
 
-    coeff = coeff[:n_species, :max_nc, :]
+    def get_transport_coeffs(self):
+        return TransportCoefficients(self).compute()
 
-    return np.array(coeff)
-
-
-def colxi(nc, zsp, mass, density, temperature):
-    """
-    Calculates the collision frequencies and the weighting factors xi.
-
-    Parameters
-    ----------
-    tau : array(nsm,nsm)
-        Collision frequency weighted over charge states.
-    xi : array(nsm,nsm)
-        Relative weight of every charge state.
-    """
-    tau, xi = _neoart.colxi(nc, zsp, density, temperature, mass)
-    return tau, xi
-
-
-from configuration import Configuration
-from result import Result
-
-def neoart2(rho, config):
-    """
-    Low level wrapper of NEOART.
-    """
-    d = config.todict()
-    n_species = len(d['masses'])
-
-    shape_ = _neoart.get_elem_config()
-    zsp = np.zeros(shape_)
-    den = np.zeros(shape_)
-    ds = np.zeros(shape_ + (2,))
-
-    den[:n_species, :] = d['den']
-    zsp[:n_species, :] = d['zsp']
-    ds[:n_species, :, :] = d['ds']
-
-    coeff = _neoart.neoart(d['nc'], zsp, d['masses'], d['temperatures'], den,
-            ds, rho, d['eps'], d['isel'], d['ishot'], d['nreg'], d['sigma'],
-            d['nleg'], d['nenergy'], d['ncof'], d['neogeo'],
-            d['neofrc'], d['ic'], d['eparr'])
-
-    coeff = coeff[:n_species, 0, :]
-    return Result(coeff, config)
-
-
-def circgeom(rho, Rmag, eps, q, bn):
-    """
-    Store the parameters of the circular geometry.
-
-    Parmeters
-    ---------
-    rho : scalar, float
-        Flux surface label.
-    rn: scalar, float
-        Major radius of the magnetic axis.
-    e: scalar, float
-        Inverse aspect ratio of the surface.
-    q: scalar, float
-        Safety factor of the flux surface.
-    bn: scalar, float
-        Magnetic field strentgh in chi = pi / 1 with chi being the poloidal
-        angle.
-
-    Example
-    -------
-    >>> import neoart
-    >>> neoart.circgeom(rho=1.65e-4, Rmag=1.65, eps=1e-4, q=2, bn=2.5)
-    """
-    _neoart.circgeom(1, rho, Rmag, eps, q, bn)
-
-
-def colxi2(config):
-    """
-    Calculates the collision frequencies and the weighting factors xi.
-
-    Parameters
-    ----------
-    tau : array(nsm,nsm)
-        Collision frequency weighted over charge states.
-    xi : array(nsm,nsm)
-        Relative weight of every charge state.
-    """
-    d = config.todict()
-    tau, xi = _neoart.colxi(d['nc'], d['zsp'], d['den'], d['temperatures'],
-            d['masses'])
-
-    return tau, xi
+    species = property(lambda self: self._species)
+    geometry = property(lambda self: self._geometry)
+    numerical = property(lambda self: self._numerical)
 
 
 if __name__ == '__main__':
