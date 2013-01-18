@@ -1,0 +1,13 @@
+./neoart
+*.swp
+src/*.o
+tests/*.o
+tests/test
+tests/test_output
+
+
+*.pyc
+python/build
+python/neoart/_neoart.so
+python/src/_neoart-f2pywrappers.f
+python/src/_neoartmodule.c
